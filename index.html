@@ -3,43 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MetLife · Propuestas Felipe Guerra</title>
+<title>MetLife · Tus Leads · Felipe Guerra</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:        #030D1A;
-  --bg1:       #071525;
-  --bg2:       #0D1F35;
-  --bg3:       #132840;
-  --green:     #00A0DF;
-  --green-dim: rgba(0,160,223,0.10);
+  --bg:         #030D1A;
+  --bg1:        #071525;
+  --bg2:        #0D1F35;
+  --bg3:        #132840;
+  --green:      #00A0DF;
+  --green-dim:  rgba(0,160,223,0.10);
   --green-glow: 0 0 30px rgba(0,160,223,0.22);
-  --white:     #F0F5FA;
-  --gray:      #7A90A8;
-  --gray-dark: #1A3550;
-  --gold:      #F5A623;
-  --sans:      'Inter', system-ui, sans-serif;
-  --radius:    16px;
-  --radius-lg: 24px;
-  --border:    rgba(255,255,255,0.07);
+  --white:      #F0F5FA;
+  --gray:       #7A90A8;
+  --gray-dark:  #1A3550;
+  --gold:       #F5A623;
+  --sans:       'Inter', system-ui, sans-serif;
+  --radius:     16px;
+  --radius-lg:  24px;
+  --border:     rgba(255,255,255,0.07);
+
+  /* Status colors */
+  --closed:     #22C55E;
+  --closed-dim: rgba(34,197,94,0.10);
+  --open:       #FF5A5A;
+  --open-dim:   rgba(255,90,90,0.10);
 }
 
 html.light {
-  --bg:        #F0F5FA;
-  --bg1:       #E6EEF7;
-  --bg2:       #FFFFFF;
-  --bg3:       #D8E8F5;
-  --green:     #0065AC;
-  --green-dim: rgba(0,101,172,0.08);
+  --bg:         #F0F5FA;
+  --bg1:        #E6EEF7;
+  --bg2:        #FFFFFF;
+  --bg3:        #D8E8F5;
+  --green:      #0065AC;
+  --green-dim:  rgba(0,101,172,0.08);
   --green-glow: 0 0 20px rgba(0,101,172,0.18);
-  --white:     #1A2A3A;
-  --gray:      #5A7080;
-  --gray-dark: #C5D8E8;
-  --gold:      #C47F00;
-  --border:    rgba(0,56,101,0.1);
+  --white:      #1A2A3A;
+  --gray:       #5A7080;
+  --gray-dark:  #C5D8E8;
+  --gold:       #C47F00;
+  --border:     rgba(0,56,101,0.1);
+  --closed:     #16A34A;
+  --closed-dim: rgba(22,163,74,0.08);
+  --open:       #DC2626;
+  --open-dim:   rgba(220,38,38,0.07);
 }
 
 html { scroll-behavior: smooth; }
@@ -59,20 +69,9 @@ header {
   justify-content: space-between;
   gap: 24px;
 }
-.logo {
-  font-size: 20px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--white);
-}
+.logo { font-size: 20px; font-weight: 800; letter-spacing: -0.03em; color: var(--white); }
 .logo span { color: #00C4FF; }
-.logo-sub {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--gray);
-  margin-top: 4px;
-  letter-spacing: 0;
-}
+.logo-sub { font-size: 12px; font-weight: 400; color: var(--gray); margin-top: 4px; }
 .theme-btn {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -89,10 +88,8 @@ header {
 }
 .theme-btn:hover { border-color: var(--green); color: var(--green); }
 
-/* ── HERO TEXT ────────────────────────────── */
-.hero {
-  padding: 56px clamp(24px,6vw,100px) 0;
-}
+/* ── HERO ─────────────────────────────────── */
+.hero { padding: 56px clamp(24px,6vw,100px) 0; }
 .eyebrow {
   font-size: 10px;
   font-weight: 700;
@@ -114,56 +111,84 @@ header {
   margin-bottom: 16px;
 }
 .hero h1 span { color: #00C4FF; }
-.hero p {
-  font-size: 15px;
-  color: var(--gray);
-  max-width: 480px;
-  line-height: 1.6;
-}
+.hero p { font-size: 15px; color: var(--gray); max-width: 480px; line-height: 1.6; }
 
 /* ── STATS BAR ────────────────────────────── */
 .stats-bar {
   display: flex;
-  gap: 32px;
+  gap: 40px;
   padding: 36px clamp(24px,6vw,100px);
   flex-wrap: wrap;
+  align-items: flex-end;
 }
 .stat-item {}
 .stat-val {
   font-family: Georgia, serif;
-  font-size: 32px;
+  font-size: 36px;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: var(--white);
+  line-height: 1;
 }
-.stat-val.green { color: var(--green); }
+.stat-val.c-closed { color: var(--closed); }
+.stat-val.c-open   { color: var(--open); }
+.stat-val.c-green  { color: var(--green); }
 .stat-lbl {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gray);
-  margin-top: 2px;
+  margin-top: 5px;
+}
+.stats-sep {
+  width: 1px;
+  height: 40px;
+  background: var(--border);
+  align-self: center;
 }
 
 /* ── DIVIDER ──────────────────────────────── */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0 clamp(24px,6vw,100px);
+.divider { height: 1px; background: var(--border); margin: 0 clamp(24px,6vw,100px); }
+
+/* ── LEGEND ───────────────────────────────── */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 clamp(24px,6vw,100px);
+  margin-bottom: 28px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray);
+}
+.legend-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.legend-dot.closed { background: var(--closed); }
+.legend-dot.open   { background: var(--open); animation: legendPulse 2s ease-in-out infinite; }
+
+@keyframes legendPulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,90,90,0.4); }
+  50%      { box-shadow: 0 0 0 5px rgba(255,90,90,0); }
 }
 
 /* ── GRID ─────────────────────────────────── */
-.grid-section {
-  padding: 48px clamp(24px,6vw,100px) 80px;
-}
+.grid-section { padding: 0 clamp(24px,6vw,100px) 80px; }
 .section-label {
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--gray);
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .clients-grid {
   display: grid;
@@ -173,8 +198,6 @@ header {
 
 /* ── CLIENT CARD ──────────────────────────── */
 .client-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 28px 32px;
   text-decoration: none;
@@ -182,28 +205,49 @@ header {
   transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
   position: relative;
   overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg2);
 }
+
+/* Top accent stripe — always visible per status */
 .client-card::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--green);
-  opacity: 0;
-  transition: opacity 0.25s;
+  height: 3px;
 }
-.client-card:hover {
-  border-color: rgba(0,160,223,0.25);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--green-glow);
-}
-.client-card:hover::before { opacity: 1; }
 
+/* CERRADO */
+.client-card.cerrado {
+  border-color: rgba(34,197,94,0.18);
+  background: linear-gradient(160deg, var(--bg2) 60%, rgba(34,197,94,0.04) 100%);
+}
+.client-card.cerrado::before { background: var(--closed); }
+.client-card.cerrado:hover {
+  border-color: rgba(34,197,94,0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25), 0 0 24px rgba(34,197,94,0.12);
+}
+
+/* ABIERTO */
+.client-card.abierto {
+  border-color: rgba(255,90,90,0.18);
+  background: linear-gradient(160deg, var(--bg2) 60%, rgba(255,90,90,0.03) 100%);
+}
+.client-card.abierto::before { background: var(--open); }
+.client-card.abierto:hover {
+  border-color: rgba(255,90,90,0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25), 0 0 24px rgba(255,90,90,0.1);
+}
+
+/* Card layout */
 .card-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 .card-name {
   font-size: 20px;
@@ -212,35 +256,50 @@ header {
   color: var(--white);
   line-height: 1.2;
 }
-.card-date {
-  font-size: 11px;
-  color: var(--gray);
-  margin-top: 4px;
-}
-.card-arrow {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--green-dim);
-  border: 1px solid rgba(0,160,223,0.15);
-  display: flex;
+.card-date { font-size: 11px; color: var(--gray); margin-top: 4px; }
+
+/* Status badge */
+.status-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--green);
-  font-size: 14px;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 13px;
+  border-radius: 100px;
+  white-space: nowrap;
   flex-shrink: 0;
-  transition: all 0.2s;
 }
-.client-card:hover .card-arrow {
-  background: var(--green);
-  color: #fff;
-  border-color: var(--green);
+.status-badge.cerrado {
+  background: rgba(34,197,94,0.12);
+  border: 1px solid rgba(34,197,94,0.28);
+  color: var(--closed);
+}
+.status-badge.abierto {
+  background: rgba(255,90,90,0.10);
+  border: 1px solid rgba(255,90,90,0.28);
+  color: var(--open);
+}
+.badge-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cerrado .badge-dot { background: var(--closed); }
+.abierto .badge-dot {
+  background: var(--open);
+  animation: badgeDot 1.5s ease-in-out infinite;
+}
+@keyframes badgeDot {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
 }
 
 .card-meta {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 .meta-chip {
   font-size: 11px;
@@ -252,6 +311,12 @@ header {
   padding: 4px 12px;
 }
 
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
 .card-products {
   display: flex;
   gap: 6px;
@@ -268,18 +333,21 @@ header {
   color: var(--green);
   border: 1px solid rgba(0,160,223,0.15);
 }
-
-/* ── EMPTY STATE ──────────────────────────── */
-.empty-card {
-  background: var(--bg2);
-  border: 1px dashed var(--gray-dark);
-  border-radius: var(--radius-lg);
-  padding: 40px 32px;
-  text-align: center;
+.card-arrow {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--gray);
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 12px;
+  flex-shrink: 0;
+  transition: all 0.2s;
 }
+.cerrado:hover .card-arrow { background: var(--closed); color: #fff; border-color: var(--closed); }
+.abierto:hover .card-arrow { background: var(--open);   color: #fff; border-color: var(--open); }
 
 /* ── FOOTER ───────────────────────────────── */
 footer {
@@ -296,17 +364,20 @@ footer {
 .footer-right { font-size: 11px; color: rgba(255,255,255,0.15); }
 
 /* ── LIGHT OVERRIDES ──────────────────────── */
-html.light .client-card { background: #fff; box-shadow: 0 2px 12px rgba(0,56,101,0.06); }
-html.light .client-card:hover { box-shadow: 0 8px 32px rgba(0,56,101,0.12); }
+html.light .client-card { box-shadow: 0 2px 12px rgba(0,56,101,0.06); }
+html.light .client-card.cerrado { background: linear-gradient(160deg, #fff 60%, rgba(22,163,74,0.04) 100%); }
+html.light .client-card.abierto { background: linear-gradient(160deg, #fff 60%, rgba(220,38,38,0.03) 100%); }
 html.light .meta-chip { background: rgba(0,56,101,0.04); border-color: rgba(0,56,101,0.1); }
-html.light .empty-card { background: #fff; }
+html.light .card-arrow { background: rgba(0,56,101,0.04); border-color: rgba(0,56,101,0.08); color: var(--gray); }
 html.light footer { border-top-color: rgba(0,56,101,0.1); }
 html.light .footer-right { color: rgba(0,56,101,0.25); }
 html.light .theme-btn { background: #fff; }
+html.light .stats-sep { background: rgba(0,56,101,0.1); }
 
 @media (max-width: 600px) {
   .stats-bar { gap: 20px; }
   .clients-grid { grid-template-columns: 1fr; }
+  .stats-sep { display: none; }
 }
 </style>
 </head>
@@ -321,66 +392,84 @@ html.light .theme-btn { background: #fff; }
 </header>
 
 <div class="hero">
-  <div class="eyebrow">Propuestas personalizadas</div>
-  <h1>Tus<br><span>clientes.</span></h1>
-  <p>Cada propuesta diseñada para la situación específica del cliente. Comparte el link directo por WhatsApp.</p>
+  <div class="eyebrow">Pipeline de ventas</div>
+  <h1>Tus<br><span>Leads.</span></h1>
+  <p>Cada propuesta diseñada a medida. Comparte el link directo por WhatsApp — el cliente lo abre desde su teléfono.</p>
 </div>
 
 <div class="stats-bar">
   <div class="stat-item">
-    <div class="stat-val green" id="total-clientes">2</div>
-    <div class="stat-lbl">Propuestas activas</div>
+    <div class="stat-val c-green">2</div>
+    <div class="stat-lbl">Total leads</div>
   </div>
+  <div class="stats-sep"></div>
   <div class="stat-item">
-    <div class="stat-val">Abril</div>
-    <div class="stat-lbl">Mes en curso</div>
+    <div class="stat-val c-closed">0</div>
+    <div class="stat-lbl">Cerrados</div>
+  </div>
+  <div class="stats-sep"></div>
+  <div class="stat-item">
+    <div class="stat-val c-open">2</div>
+    <div class="stat-lbl">En proceso</div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<div class="grid-section">
-  <div class="section-label">Propuestas · 2026</div>
+<div class="grid-section" style="padding-top:40px">
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot closed"></div>Venta cerrada</div>
+    <div class="legend-item"><div class="legend-dot open"></div>En proceso</div>
+  </div>
+
+  <div class="section-label">Leads · 2026</div>
   <div class="clients-grid">
 
-    <!-- Adriana Rivera -->
-    <a class="client-card" href="clientes/adriana-rivera/dark.html">
+    <!-- Adriana Rivera — EN PROCESO -->
+    <a class="client-card abierto" href="clientes/adriana-rivera/dark.html">
       <div class="card-top">
         <div>
           <div class="card-name">Adriana Rivera</div>
           <div class="card-date">27 abril 2026 · R2 agendada</div>
         </div>
-        <div class="card-arrow">→</div>
+        <div class="status-badge abierto"><div class="badge-dot"></div>En proceso</div>
       </div>
       <div class="card-meta">
         <span class="meta-chip">26 años</span>
         <span class="meta-chip">Geóloga</span>
         <span class="meta-chip">$295.000/mes</span>
       </div>
-      <div class="card-products">
-        <span class="product-tag">SVA</span>
-        <span class="product-tag">APV</span>
+      <div class="card-footer">
+        <div class="card-products">
+          <span class="product-tag">SVA</span>
+          <span class="product-tag">APV</span>
+        </div>
+        <div class="card-arrow">→</div>
       </div>
     </a>
 
-    <!-- Hugo Irribarra -->
-    <a class="client-card" href="clientes/hugo-irribarra/dark.html">
+    <!-- Hugo Irribarra — EN PROCESO -->
+    <a class="client-card abierto" href="clientes/hugo-irribarra/dark.html">
       <div class="card-top">
         <div>
           <div class="card-name">Hugo Irribarra</div>
           <div class="card-date">Abril 2026</div>
         </div>
-        <div class="card-arrow">→</div>
+        <div class="status-badge abierto"><div class="badge-dot"></div>En proceso</div>
       </div>
       <div class="card-meta">
         <span class="meta-chip">27 años</span>
         <span class="meta-chip">Ingeniero IT</span>
         <span class="meta-chip">$500.000/mes</span>
       </div>
-      <div class="card-products">
-        <span class="product-tag">Salud Total</span>
-        <span class="product-tag">Plan Integral</span>
-        <span class="product-tag">APV</span>
+      <div class="card-footer">
+        <div class="card-products">
+          <span class="product-tag">Salud Total</span>
+          <span class="product-tag">Plan Integral</span>
+          <span class="product-tag">APV</span>
+        </div>
+        <div class="card-arrow">→</div>
       </div>
     </a>
 
