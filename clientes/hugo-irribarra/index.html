@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Propuesta MetLife · Hugo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:        #0B1929;
+  --navy-mid:    #132338;
+  --navy-soft:   #1E3550;
+  --cream:       #F7F4EF;
+  --cream-dark:  #EEE9E0;
+  --green:       oklch(63% 0.17 148);
+  --green-pale:  oklch(95% 0.04 148);
+  --red-pale:    oklch(95% 0.04 15);
+  --red:         oklch(58% 0.18 20);
+  --blue-pale:   oklch(94% 0.04 245);
+  --blue:        oklch(55% 0.18 248);
+  --gold:        oklch(76% 0.13 72);
+  --text:        #1A2535;
+  --text-soft:   #5A6A7E;
+  --serif:       'Cormorant Garamond', Georgia, serif;
+  --sans:        'DM Sans', system-ui, sans-serif;
+  --radius:      16px;
+  --radius-sm:   10px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── NAV DOTS ─────────────────────────────── */
+#nav-dots {
+  position: fixed;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.dot.active {
+  width: 8px;
+  height: 28px;
+  background: #fff;
+  border-radius: 4px;
+}
+.dot-dark { background: rgba(11,25,41,0.18); }
+.dot-dark.active { background: var(--navy); }
+
+/* ── HERO ─────────────────────────────────── */
+#hero {
+  background: var(--navy);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px clamp(24px,6vw,120px);
+  position: relative;
+  overflow: hidden;
+}
+#hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(30,53,80,0.9) 0%, transparent 70%),
+              radial-gradient(ellipse 50% 80% at 10% 80%, rgba(oklch(63% 0.17 148),0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+#hero::after {
+  content: '';
+  position: absolute;
+  right: -200px;
+  top: -200px;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content { position: relative; z-index: 2; max-width: 860px; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 100px;
+  padding: 6px 16px;
+  color: rgba(255,255,255,0.75);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(48px, 7vw, 92px);
+  font-weight: 500;
+  color: #fff;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.hero-title em { font-style: italic; color: var(--gold); font-weight: 400; }
+
+.hero-sub {
+  font-size: clamp(15px,1.6vw,18px);
+  color: rgba(255,255,255,0.5);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  margin-bottom: 48px;
+}
+.hero-sub span { color: rgba(255,255,255,0.8); }
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 8px 18px;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+  font-weight: 400;
+}
+.pill.green {
+  background: rgba(oklch(63% 0.17 148),0.15);
+  border-color: rgba(oklch(63% 0.17 148),0.3);
+  color: #fff;
+}
+.pill-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:0.5; }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.3);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+.hero-scroll::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+}
+@keyframes scrollBounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(6px); }
+}
+
+/* ── SECTION BASE ─────────────────────────── */
+section {
+  padding: clamp(60px,8vh,110px) clamp(24px,6vw,120px);
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 12px;
+}
+.section-label.light { color: rgba(255,255,255,0.4); }
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(32px,4vw,52px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 48px;
+}
+.section-title.light { color: #fff; }
+
+/* ── DIAGNÓSTICO ──────────────────────────── */
+#diagnostico { background: var(--cream); }
+
+.diag-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+.diag-col {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.diag-col::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.diag-col.verde::before { background: var(--green); }
+.diag-col.rojo::before  { background: var(--red); }
+.diag-col.azul::before  { background: var(--blue); }
+
+.diag-col-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.diag-col-icon {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.verde .diag-col-icon { background: var(--green-pale); color: var(--green); }
+.rojo  .diag-col-icon { background: var(--red-pale);   color: var(--red); }
+.azul  .diag-col-icon { background: var(--blue-pale);  color: var(--blue); }
+
+.diag-col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-soft);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.diag-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.diag-bullet {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.verde .diag-bullet { background: var(--green); }
+.rojo  .diag-bullet { background: var(--red); }
+.azul  .diag-bullet { background: var(--blue); }
+
+.diag-item p { font-size: 14px; line-height: 1.5; color: var(--text); }
+
+.diag-frase {
+  background: var(--navy);
+  border-radius: var(--radius);
+  padding: 32px 40px;
+  text-align: center;
+}
+.diag-frase p {
+  font-family: var(--serif);
+  font-size: clamp(22px,2.5vw,32px);
+  font-weight: 500;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.3;
+}
+.diag-frase p::before { content: '"'; opacity:0.4; }
+.diag-frase p::after  { content: '"'; opacity:0.4; }
+
+/* ── SALUD TOTAL ──────────────────────────── */
+#salud { background: #fff; }
+
+.salud-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.salud-card {
+  background: var(--cream);
+  border-radius: var(--radius);
+  padding: 36px;
+}
+
+.salud-card.dark {
+  background: var(--navy);
+  color: #fff;
+}
+
+.salud-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+}
+.dark .salud-stat-label { color: rgba(255,255,255,0.45); }
+
+.salud-stat-val {
+  font-family: Georgia, serif;
+  font-size: clamp(28px,3vw,42px);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.dark .salud-stat-val { color: #fff; }
+
+.salud-stat-sub {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.dark .salud-stat-sub { color: rgba(255,255,255,0.4); }
+
+.salud-stats { display: flex; flex-direction: column; gap: 28px; margin-bottom: 36px; }
+
+.salud-separator {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  margin-bottom: 28px;
+}
+
+.salud-coberturas { display: flex; flex-direction: column; gap: 14px; }
+
+.cobertura-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+}
+
+.check-icon {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.check-icon svg { width:20px; height:20px; }
+
+.salud-familia {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 40px;
+}
+.familia-badge {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.familia-badge-uf {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ── INTEGRAL ─────────────────────────────── */
+#integral { background: var(--cream); }
+
+.toggle-container {
+  display: flex;
+  gap: 0;
+  background: rgba(11,25,41,0.06);
+  border-radius: 100px;
+  padding: 4px;
+  width: fit-content;
+  margin-bottom: 40px;
+}
+.toggle-btn {
+  padding: 10px 28px;
+  border-radius: 100px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-soft);
+  transition: all 0.25s;
+}
+.toggle-btn.active {
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(11,25,41,0.25);
+}
+
+.int-stats {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px;
+}
+.stat-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.stat-card-val {
+  font-family: Georgia, serif;
+  font-size: clamp(20px,2.2vw,30px);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+.stat-card-sub {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.stat-card.highlight .stat-card-val { color: var(--green); }
+
+/* ── EXPLAINER CARDS ─────────────────────── */
+.explainer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.explainer-card {
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.explainer-card.basica {
+  background: var(--navy);
+  color: #fff;
+}
+.explainer-card.ahorro {
+  background: var(--green-pale);
+  border: 1.5px solid rgba(oklch(63% 0.17 148),0.25);
+}
+.explainer-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.basica .explainer-tag {
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+}
+.ahorro .explainer-tag {
+  background: rgba(oklch(63% 0.17 148),0.15);
+  color: var(--green);
+}
+.explainer-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.explainer-amount-val {
+  font-family: Georgia, serif;
+  font-size: clamp(26px,2.8vw,38px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.basica .explainer-amount-val { color: #fff; }
+.ahorro .explainer-amount-val { color: var(--text); }
+.explainer-amount-sub {
+  font-size: 12px;
+  color: var(--text-soft);
+}
+.basica .explainer-amount-sub { color: rgba(255,255,255,0.4); }
+.explainer-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.basica .explainer-desc { color: rgba(255,255,255,0.55); border-color: rgba(255,255,255,0.08); }
+.ahorro .explainer-desc { color: var(--text-soft); border-color: rgba(0,0,0,0.07); }
+
+.chart-wrap {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.chart-sub {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-bottom: 24px;
+}
+.chart-canvas-wrap { height: 240px; position: relative; }
+
+.int-tabla {
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.int-tabla-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 14px 24px;
+  background: var(--navy);
+}
+.int-tabla-header span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.int-tabla-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--cream-dark);
+  align-items: center;
+  transition: background 0.2s;
+}
+.int-tabla-row:hover { background: var(--cream); }
+.int-tabla-row:last-child { border-bottom: none; }
+.tabla-year {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-soft);
+}
+.tabla-val {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.tabla-val.green { color: var(--green); }
+.meta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-pale);
+  border: 1px solid rgba(oklch(63% 0.17 148),0.2);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  margin-top: 16px;
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+.meta-badge::before {
+  content: '★';
+  font-size: 10px;
+}
+
+/* ── JUBILACIÓN ───────────────────────────── */
+#jubilacion { background: var(--navy); }
+
+.jub-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 32px;
+  height: 320px;
+  margin-bottom: 40px;
+  padding-bottom: 1px;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+.jub-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.jub-bar-val {
+  font-family: Georgia, serif;
+  font-size: clamp(16px,1.8vw,24px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-align: center;
+}
+
+.jub-bar {
+  width: 100%;
+  max-width: 80px;
+  border-radius: 8px 8px 0 0;
+  background: rgba(255,255,255,0.12);
+  transition: height 1.2s cubic-bezier(0.4,0,0.2,1);
+  height: 0;
+  position: relative;
+  overflow: hidden;
+}
+.jub-bar.tipo1 { background: rgba(255,255,255,0.15); }
+.jub-bar.tipo2 { background: var(--blue); }
+.jub-bar.tipo3 { background: var(--green); }
+
+.jub-bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 60%;
+  background: rgba(255,255,255,0.05);
+  border-radius: 8px 8px 0 0;
+}
+
+.jub-bar-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.jub-brecha-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.jub-brecha-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+.jub-brecha-val {
+  font-family: Georgia, serif;
+  font-size: clamp(24px,2.8vw,40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--gold);
+}
+.jub-brecha-text {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* ── PRESUPUESTO ──────────────────────────── */
+#presupuesto { background: var(--cream); }
+
+.budget-list {
+  background: #fff;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.budget-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--cream-dark);
+}
+.budget-item:last-child { border-bottom: none; }
+.budget-item-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--text);
+}
+.budget-item-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--navy);
+  opacity: 0.3;
+}
+.budget-item-price {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.budget-total {
+  background: var(--navy);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.budget-total-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.budget-total-val {
+  font-family: Georgia, serif;
+  font-size: clamp(24px,2.8vw,38px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.budget-remanente {
+  text-align: right;
+  padding: 12px 28px;
+  font-size: 14px;
+}
+.budget-remanente .label { color: var(--text-soft); margin-right: 8px; }
+.budget-remanente .val { font-weight: 600; }
+.budget-remanente .val.pos { color: var(--green); }
+.budget-remanente .val.neg { color: var(--red); }
+
+/* ── CTA ──────────────────────────────────── */
+#cta { background: #fff; }
+
+.cta-card {
+  background: var(--navy);
+  border-radius: calc(var(--radius) * 1.5);
+  padding: clamp(40px,6vw,72px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-card::before {
+  content: '';
+  position: absolute;
+  right: -120px; top: -120px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-title {
+  font-family: var(--serif);
+  font-size: clamp(32px,4vw,52px);
+  font-weight: 500;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.cta-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+
+.cta-actions { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 16px 32px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+}
+.btn-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.45);
+}
+
+.asesor-info {
+  text-align: center;
+  color: rgba(255,255,255,0.35);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.asesor-info strong { color: rgba(255,255,255,0.6); }
+
+/* ── FOOTER ───────────────────────────────── */
+footer {
+  background: var(--navy);
+  padding: 32px clamp(24px,6vw,120px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-legal {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.6;
+  max-width: 720px;
+}
+.footer-date {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+  white-space: nowrap;
+}
+
+/* ── ANIMATIONS ───────────────────────────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .diag-grid { grid-template-columns: 1fr; }
+  .salud-grid { grid-template-columns: 1fr; }
+  .int-stats  { grid-template-columns: 1fr 1fr; }
+  .cta-card        { grid-template-columns: 1fr; }
+  .jub-bars        { gap: 16px; }
+  #nav-dots        { right: 12px; }
+  .explainer-grid  { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav id="nav-dots" aria-label="Navegación de secciones">
+  <div class="dot" data-target="diagnostico" title="Diagnóstico"></div>
+  <div class="dot" data-target="salud" title="Salud Total"></div>
+  <div class="dot" data-target="integral" title="Vida + Ahorro"></div>
+  <div class="dot" data-target="jubilacion" title="Jubilación"></div>
+  <div class="dot" data-target="presupuesto" title="Presupuesto"></div>
+  <div class="dot" data-target="cta" title="Agendar"></div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">MetLife Chile · Propuesta personalizada</div>
+    <h1 class="hero-title">Hugo, tu plan <em>financiero</em></h1>
+    <p class="hero-sub">Preparado por <span>Felipe Guerra</span> · <span>Abril 2026</span></p>
+    <div class="pills">
+      <span class="pill"><span class="pill-dot"></span>27 años</span>
+      <span class="pill"><span class="pill-dot"></span>Ingeniero IT</span>
+      <span class="pill"><span class="pill-dot"></span>Valdivia</span>
+      <span class="pill green"><span class="pill-dot"></span>Papá de Olivia</span>
+    </div>
+  </div>
+  <div class="hero-scroll">Explorar</div>
+</section>
+
+<!-- DIAGNÓSTICO -->
+<section id="diagnostico">
+  <div class="section-label">Tu situación actual</div>
+  <h2 class="section-title">Diagnóstico</h2>
+
+  <div class="diag-grid">
+    <div class="diag-col verde fade-up">
+      <div class="diag-col-header">
+        <div class="diag-col-icon">✓</div>
+        <span class="diag-col-title">Lo que funciona</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sueldo estable $2M líquido</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Cultura financiera — Fintual, Racional</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Fondo común con Catalina al 4%</p></div>
+    </div>
+
+    <div class="diag-col rojo fade-up" style="transition-delay:0.1s">
+      <div class="diag-col-header">
+        <div class="diag-col-icon">!</div>
+        <span class="diag-col-title">Lo que falta</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin seguros — Olivia nació hace 1 semana</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin protección de vida para su familia</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Ahorro en pesos pierde contra la UF</p></div>
+    </div>
+
+    <div class="diag-col azul fade-up" style="transition-delay:0.2s">
+      <div class="diag-col-header">
+        <div class="diag-col-icon">→</div>
+        <span class="diag-col-title">Tu meta</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Pie departamento $20M en 5 años</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Proteger a Catalina y Olivia</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Jubilar sin depender 100% de la AFP</p></div>
+    </div>
+  </div>
+
+  <div class="diag-frase fade-up" style="transition-delay:0.3s">
+    <p>Tienes la mentalidad correcta — ahora necesitas el instrumento correcto.</p>
+  </div>
+</section>
+
+<!-- SALUD TOTAL -->
+<section id="salud">
+  <div class="section-label">Cobertura médica</div>
+  <h2 class="section-title">Salud Total</h2>
+
+  <div class="salud-grid">
+    <div class="salud-card dark fade-up">
+      <div class="salud-stats">
+        <div>
+          <div class="salud-stat-label">Capital asegurado</div>
+          <div class="salud-stat-val">UF 30.000</div>
+          <div class="salud-stat-sub">Cobertura hospitalaria completa</div>
+        </div>
+        <div>
+          <div class="salud-stat-label">Prima mensual familia</div>
+          <div class="salud-stat-val">$81.655</div>
+          <div class="salud-stat-sub">Los tres protegidos</div>
+        </div>
+        <div>
+          <div class="salud-stat-label">Costo diario</div>
+          <div class="salud-stat-val">$2.722</div>
+          <div class="salud-stat-sub">Deducible: UF 50 ($2.001.350)</div>
+        </div>
+      </div>
+
+      <div class="salud-separator"></div>
+
+      <div class="salud-familia">
+        <div class="familia-badge">
+          Hugo · <span class="familia-badge-uf">UF 0,73</span>
+        </div>
+        <div class="familia-badge">
+          Catalina · <span class="familia-badge-uf">UF 0,73</span>
+        </div>
+        <div class="familia-badge">
+          Olivia · <span class="familia-badge-uf">UF 0,58</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="salud-card fade-up" style="transition-delay:0.12s">
+      <div class="salud-stat-label" style="margin-bottom:20px">Coberturas incluidas</div>
+      <div class="salud-coberturas">
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Hospitalización ilimitada
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Urgencias 24/7
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Maternidad completa
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Enfermedades catastróficas
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Cuidados intensivos sin límite
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Cobertura internacional
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Medicamentos hospitalizados
+        </div>
+        <div class="cobertura-item" style="color:var(--text)">
+          <div class="check-icon">
+            <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="var(--green)" stroke-width="1.5"/><path d="M6 10l2.5 2.5L14 7.5" stroke="var(--green)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          Trasplantes incluidos
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRAL -->
+<section id="integral">
+  <div class="section-label">Vida + Ahorro</div>
+  <h2 class="section-title">Plan Integral</h2>
+
+  <!-- EXPLAINER CARDS -->
+  <div class="explainer-grid fade-up">
+    <div class="explainer-card basica">
+      <div class="explainer-tag">Prima Básica</div>
+      <div class="explainer-amount">
+        <div class="explainer-amount-val" id="explainer-basica-val"></div>
+        <div class="explainer-amount-sub" id="explainer-basica-sub"></div>
+      </div>
+      <div class="explainer-desc">Cubre el costo de tu <strong style="color:#fff">protección de vida y PACI</strong> — es la prima que paga tu seguro. Esta parte no se acumula, pero te da cobertura desde el día uno.</div>
+    </div>
+    <div class="explainer-card ahorro">
+      <div class="explainer-tag">Prima Ahorro en Exceso</div>
+      <div class="explainer-amount">
+        <div class="explainer-amount-val" id="explainer-ahorro-val"></div>
+        <div class="explainer-amount-sub" id="explainer-ahorro-sub"></div>
+      </div>
+      <div class="explainer-desc">Es lo que tú decides ahorrar <strong>por sobre la protección</strong>. Se invierte en UF, crece con el tiempo y lo puedes rescatar. Aquí está el motor de tu meta de $20M.</div>
+    </div>
+  </div>
+
+  <div class="toggle-container">
+    <button class="toggle-btn active" id="btn-a" onclick="setOpcion('A')">
+      Opción A · $500.000/mes
+    </button>
+    <button class="toggle-btn" id="btn-b" onclick="setOpcion('B')">
+      Opción B · $899.000/mes
+    </button>
+  </div>
+
+  <div class="int-stats">
+    <div class="stat-card fade-up">
+      <div class="stat-card-label">Protección Vida + PACI</div>
+      <div class="stat-card-val">$159.200.000</div>
+      <div class="stat-card-sub">UF 4.000</div>
+    </div>
+    <div class="stat-card fade-up" style="transition-delay:0.08s">
+      <div class="stat-card-label">Premio permanencia</div>
+      <div class="stat-card-val">$329.348</div>
+      <div class="stat-card-sub">UF 8,26 en año 10</div>
+    </div>
+    <div class="stat-card fade-up" style="transition-delay:0.16s">
+      <div class="stat-card-label">Prima ahorro mensual</div>
+      <div class="stat-card-val" id="prima-ahorro-val"></div>
+      <div class="stat-card-sub" id="prima-ahorro-sub"></div>
+    </div>
+    <div class="stat-card highlight fade-up" style="transition-delay:0.24s">
+      <div class="stat-card-label">Valor acumulado año 10</div>
+      <div class="stat-card-val" id="val-y10"></div>
+      <div class="stat-card-sub" id="val-y10-sub"></div>
+    </div>
+  </div>
+
+  <div class="chart-wrap fade-up">
+    <div class="chart-title">Proyección de ahorro acumulado</div>
+    <div class="chart-sub">UF acumuladas · Años 0–10 · Línea punteada = Meta $20M</div>
+    <div class="chart-canvas-wrap">
+      <canvas id="chartProyeccion"></canvas>
+    </div>
+  </div>
+
+  <div class="int-tabla fade-up">
+    <div class="int-tabla-header">
+      <span>Año</span>
+      <span>UF acumuladas</span>
+      <span>En pesos aprox.</span>
+      <span>vs. Meta $20M</span>
+    </div>
+    <div class="int-tabla-row">
+      <div class="tabla-year">Año 1</div>
+      <div class="tabla-val" id="y1-uf"></div>
+      <div class="tabla-val" id="y1-clp"></div>
+      <div class="tabla-val" id="y1-pct" style="font-size:13px; color:var(--text-soft)"></div>
+    </div>
+    <div class="int-tabla-row">
+      <div class="tabla-year">Año 2</div>
+      <div class="tabla-val" id="y2-uf"></div>
+      <div class="tabla-val" id="y2-clp"></div>
+      <div class="tabla-val" id="y2-pct" style="font-size:13px; color:var(--text-soft)"></div>
+    </div>
+    <div class="int-tabla-row">
+      <div class="tabla-year">Año 4</div>
+      <div class="tabla-val" id="y4-uf"></div>
+      <div class="tabla-val" id="y4-clp"></div>
+      <div class="tabla-val" id="y4-pct" style="font-size:13px; color:var(--text-soft)"></div>
+    </div>
+    <div class="meta-badge" id="meta-badge"></div>
+  </div>
+</section>
+
+<!-- JUBILACIÓN -->
+<section id="jubilacion">
+  <div class="section-label" style="color:rgba(255,255,255,0.4)">Proyección a largo plazo</div>
+  <h2 class="section-title" style="color: #fff; font-family: &quot;Cormorant Garamond&quot;">Tu jubilación</h2>
+
+  <div class="jub-bars" id="jub-bars">
+    <div class="jub-bar-wrap">
+      <div class="jub-bar-val" id="jub-val-1">$1.383.000</div>
+      <div class="jub-bar tipo1" id="jub-bar-1"></div>
+      <div class="jub-bar-label">Solo AFP</div>
+    </div>
+    <div class="jub-bar-wrap">
+      <div class="jub-bar-val" id="jub-val-2" style="font-family: Georgia">$2.012.000</div>
+      <div class="jub-bar tipo2" id="jub-bar-2"></div>
+      <div class="jub-bar-label">AFP<br>+APV $100k/mes</div>
+    </div>
+    <div class="jub-bar-wrap">
+      <div class="jub-bar-val" id="jub-val-3">$2.891.000</div>
+      <div class="jub-bar tipo3" id="jub-bar-3"></div>
+      <div class="jub-bar-label">AFP<br>+APV $240k/mes</div>
+    </div>
+  </div>
+
+  <div class="jub-brecha-card">
+    <div>
+      <div class="jub-brecha-label">Brecha vs. ingreso actual</div>
+      <div class="jub-brecha-val">$617.000</div>
+    </div>
+    <div class="jub-brecha-text">
+      Sin APV, tu pensión estimada cae <strong>$617.000</strong> por mes respecto a tu ingreso actual. El plan integral complementa tu AFP para reducir esta brecha.
+    </div>
+  </div>
+</section>
+
+<!-- PRESUPUESTO -->
+<section id="presupuesto">
+  <div class="section-label">Resumen económico</div>
+  <h2 class="section-title">Presupuesto mensual</h2>
+
+  <div class="budget-list">
+    <div class="budget-item">
+      <div class="budget-item-name">
+        <div class="budget-item-dot"></div>
+        Salud Total — familia completa
+      </div>
+      <div class="budget-item-price">$81.655</div>
+    </div>
+    <div class="budget-item">
+      <div class="budget-item-name">
+        <div class="budget-item-dot"></div>
+        Plan Integral — Vida + PACI
+      </div>
+      <div class="budget-item-price" id="budget-integral-price"></div>
+    </div>
+  </div>
+
+  <div class="budget-total">
+    <div class="budget-total-label">Total mensual</div>
+    <div class="budget-total-val" id="budget-total-val"></div>
+  </div>
+
+  <div class="budget-remanente">
+    <span class="label">Remanente de ingreso (sobre $2M líquido):</span>
+    <span class="val" id="budget-remanente-val"></span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-card">
+    <div>
+      <h2 class="cta-title">¿Listo para dar el siguiente paso?</h2>
+      <p class="cta-sub">Tu plan está diseñado. Solo falta agendar una reunión de 30 minutos para formalizarlo y empezar a proteger a tu familia desde hoy.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="btn-whatsapp" id="whatsapp-link" href="#" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10c0 1.54.42 2.98 1.15 4.22L2 18l3.9-1.12A7.94 7.94 0 0010 18c4.42 0 8-3.58 8-8s-3.58-8-8-8zm4.43 11.14c-.19.52-1.11 1-1.52 1.04-.4.05-.79.22-2.65-.55-2.22-.93-3.64-3.19-3.75-3.34-.11-.15-.89-1.18-.89-2.25 0-1.07.56-1.59.76-1.81.2-.22.43-.27.57-.27h.41c.13 0 .31-.05.49.37.19.44.64 1.56.7 1.67.06.11.1.24.02.39-.08.15-.12.24-.24.37-.11.13-.24.29-.34.39-.11.11-.23.23-.1.45.13.22.58.96 1.25 1.56.86.77 1.58 1.01 1.8 1.12.23.11.36.09.49-.06.13-.15.55-.64.7-.86.15-.22.3-.18.5-.11.2.07 1.28.6 1.5.71.22.11.36.17.41.26.05.09.05.52-.14 1.03z" fill="#fff"/>
+        </svg>
+        Agendar por WhatsApp
+      </a>
+      <div class="asesor-info">
+        <strong>Felipe Guerra</strong><br>
+        Asesor MetLife · Código 35411051
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-legal">
+    Este documento es una propuesta personalizada preparada con fines informativos. Los valores en UF están calculados con la UF vigente. Las proyecciones son estimaciones basadas en condiciones actuales de mercado y no garantizan rendimiento futuro. MetLife Chile S.A., Compañía de Seguros de Vida. Sujeto a aprobación de suscripción.
+  </div>
+  <div class="footer-date">Abril 2026</div>
+</footer>
+
+<script>
+// ── DATA ─────────────────────────────────────
+const DATA = {
+  opcionA: {
+    primaTotal: '$500.000',
+    primaTotalNum: 500000,
+    primaAhorro: '10,00',
+    y1: parseFloat('125.59'),
+    y2: parseFloat('264.01'),
+    y4: parseFloat('547.89'),
+    y10: parseFloat('1546.32'),
+    y10clp: '$61,5M',
+    metaAno: 'Año 4',
+  },
+  opcionB: {
+    primaTotal: '$899.000',
+    primaTotalNum: 899000,
+    primaAhorro: '20,00',
+    y1: parseFloat('248.09'),
+    y2: parseFloat('513.75'),
+    y4: parseFloat('1067.08'),
+    y10: parseFloat('3008.24'),
+    y10clp: '$119,7M',
+    metaAno: 'Año 2',
+  },
+  saludNum: 81655,
+  ingresoLiquido: 2000000,
+  whatsapp: '56935411051',
+  nombreCorto: 'Hugo',
+};
+
+// META UF equivalente a $20M (aprox UF 500 a $40.000/UF)
+const META_UF = 500;
+
+let opcionActual = 'A';
+let chart = null;
+
+function setOpcion(op) {
+  opcionActual = op;
+  document.getElementById('btn-a').classList.toggle('active', op === 'A');
+  document.getElementById('btn-b').classList.toggle('active', op === 'B');
+  actualizarIntegral();
+  actualizarPresupuesto();
+}
+
+function formatUF(n) { return 'UF ' + n.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function formatCLPFull(n) { return '$' + Math.round(n).toLocaleString('es-CL'); }
+function formatCLP(n) { return '$' + Math.round(n/1000).toLocaleString('es-CL') + 'k'; }
+
+const UF_VAL = 40000; // valor UF aproximado para conversiones
+
+function actualizarIntegral() {
+  const d = opcionActual === 'A' ? DATA.opcionA : DATA.opcionB;
+
+  // Prima ahorro: número grande en $, chico en UF
+  const primaAhorroCLP = parseFloat(d.primaAhorro.replace(',','.')) * UF_VAL;
+  document.getElementById('prima-ahorro-val').textContent = formatCLPFull(primaAhorroCLP);
+  document.getElementById('prima-ahorro-sub').textContent = 'UF ' + d.primaAhorro + '/mes';
+
+  // Valor año 10: número grande en $, chico en UF
+  const y10clp = d.y10 * UF_VAL;
+  document.getElementById('val-y10').textContent = formatCLPFull(y10clp);
+  document.getElementById('val-y10-sub').textContent = formatUF(d.y10);
+
+  // Explainer cards
+  const basicaNum = d.primaTotalNum - Math.round(parseFloat(d.primaAhorro.replace(',','.')) * UF_VAL);
+  document.getElementById('explainer-basica-val').textContent = formatCLPFull(basicaNum);
+  document.getElementById('explainer-basica-sub').textContent = 'Prima mensual de protección';
+  document.getElementById('explainer-ahorro-val').textContent = formatCLPFull(primaAhorroCLP);
+  document.getElementById('explainer-ahorro-sub').textContent = 'UF ' + d.primaAhorro + '/mes · se acumula';
+
+  // Tabla
+  document.getElementById('y1-uf').textContent  = formatUF(d.y1);
+  document.getElementById('y1-clp').textContent  = formatCLPFull(d.y1 * UF_VAL);
+  document.getElementById('y1-pct').textContent  = Math.round(d.y1/META_UF*100) + '% meta';
+  document.getElementById('y2-uf').textContent  = formatUF(d.y2);
+  document.getElementById('y2-clp').textContent  = formatCLPFull(d.y2 * UF_VAL);
+  document.getElementById('y2-pct').textContent  = Math.round(d.y2/META_UF*100) + '% meta';
+  document.getElementById('y4-uf').textContent  = formatUF(d.y4);
+  document.getElementById('y4-clp').textContent  = formatCLPFull(d.y4 * UF_VAL);
+  document.getElementById('y4-pct').textContent  = Math.round(d.y4/META_UF*100) + '% meta';
+  document.getElementById('meta-badge').textContent = '★ Meta $20M alcanzada en ' + d.metaAno;
+
+  // Gráfico
+  actualizarChart(d);
+}
+
+function actualizarChart(d) {
+  const labels = ['Año 0','Año 1','Año 2','Año 3','Año 4','Año 5','Año 6','Año 7','Año 8','Año 9','Año 10'];
+  // Interpolación suave entre puntos conocidos
+  const vals = [0, d.y1, d.y2,
+    d.y2 + (d.y4-d.y2)/2,
+    d.y4,
+    d.y4 + (d.y10-d.y4)/6,
+    d.y4 + (d.y10-d.y4)*2/6,
+    d.y4 + (d.y10-d.y4)*3/6,
+    d.y4 + (d.y10-d.y4)*4/6,
+    d.y4 + (d.y10-d.y4)*5/6,
+    d.y10
+  ];
+  const metaLine = new Array(11).fill(META_UF);
+
+  if (chart) {
+    chart.data.datasets[0].data = vals;
+    chart.data.datasets[1].data = metaLine;
+    chart.update('active');
+    return;
+  }
+
+  const ctx = document.getElementById('chartProyeccion').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'UF acumuladas',
+          data: vals,
+          borderColor: '#0B1929',
+          backgroundColor: 'rgba(11,25,41,0.06)',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#0B1929',
+          fill: true,
+          tension: 0.4,
+        },
+        {
+          label: 'Meta $20M',
+          data: metaLine,
+          borderColor: 'oklch(63% 0.17 148)',
+          borderWidth: 2,
+          borderDash: [6,4],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { font: { family: 'DM Sans', size: 12 }, color: '#5A6A7E', boxWidth: 20, padding: 16 }
+        },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.datasetIndex === 0
+              ? ' UF ' + ctx.parsed.y.toFixed(2)
+              : ' Meta: UF ' + ctx.parsed.y
+          }
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#5A6A7E', font: { family:'DM Sans', size:12 } } },
+        y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#5A6A7E', font: { family:'DM Sans', size:12 }, callback: v => 'UF '+v } }
+      }
+    }
+  });
+}
+
+function actualizarPresupuesto() {
+  const d = opcionActual === 'A' ? DATA.opcionA : DATA.opcionB;
+  const totalNum = DATA.saludNum + d.primaTotalNum;
+  const remanente = DATA.ingresoLiquido - totalNum;
+  const fmt = n => '$' + n.toLocaleString('es-CL');
+
+  document.getElementById('budget-integral-price').textContent = d.primaTotal;
+  document.getElementById('budget-total-val').textContent = fmt(totalNum);
+  const remEl = document.getElementById('budget-remanente-val');
+  remEl.textContent = (remanente >= 0 ? '+' : '') + fmt(remanente);
+  remEl.className = 'val ' + (remanente >= 0 ? 'pos' : 'neg');
+}
+
+// WhatsApp
+(function(){
+  const num = DATA.whatsapp.replace(/\D/g,'');
+  const msg = encodeURIComponent(
+    `Hola Felipe, soy ${DATA.nombreCorto}. Revisé mi propuesta y quiero agendar una reunión para avanzar.`
+  );
+  document.getElementById('whatsapp-link').href = `https://wa.me/${num}?text=${msg}`;
+})();
+
+// ── NAV DOTS ─────────────────────────────────
+const sections = ['hero','diagnostico','salud','integral','jubilacion','presupuesto','cta'];
+const dots = document.querySelectorAll('.dot');
+const darkSections = new Set(['diagnostico','salud','integral','presupuesto','cta']);
+
+function updateDots() {
+  let current = 'hero';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - window.innerHeight/2) current = id;
+  });
+
+  // Only show dots for non-hero sections
+  const contentSections = ['diagnostico','salud','integral','jubilacion','presupuesto','cta'];
+  dots.forEach((dot, i) => {
+    const target = dot.dataset.target;
+    dot.classList.toggle('active', target === current);
+    dot.classList.toggle('dot-dark', darkSections.has(current));
+  });
+}
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    const el = document.getElementById(dot.dataset.target);
+    if (el) window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
+  });
+});
+
+window.addEventListener('scroll', updateDots, { passive: true });
+updateDots();
+
+// ── JUBILACIÓN BARS ───────────────────────────
+function animateJubBars() {
+  const vals = [
+    parseInt('$1.383.000'.replace(/\D/g,'')),
+    parseInt('$2.012.000'.replace(/\D/g,'')),
+    parseInt('$2.891.000'.replace(/\D/g,'')),
+  ];
+  const maxVal = Math.max(...vals);
+  const maxH = 220;
+
+  vals.forEach((v, i) => {
+    const bar = document.getElementById('jub-bar-' + (i+1));
+    const targetH = Math.round((v / maxVal) * maxH);
+    setTimeout(() => {
+      bar.style.height = targetH + 'px';
+    }, 150 * i + 200);
+  });
+}
+
+// ── INTERSECTION OBSERVER ─────────────────────
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (e.target.id === 'jubilacion') animateJubBars();
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+document.getElementById('jubilacion') && io.observe(document.getElementById('jubilacion'));
+
+// ── INIT ─────────────────────────────────────
+actualizarIntegral();
+actualizarPresupuesto();
+</script>
+</body>
+</html>

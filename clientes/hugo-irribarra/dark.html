@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetLife · Hugo Irribarra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #030D1A;
+  --bg1:       #071525;
+  --bg2:       #0D1F35;
+  --bg3:       #132840;
+  --green:     #00A0DF;
+  --green-dim: rgba(0,160,223,0.12);
+  --green-glow: 0 0 30px rgba(0,160,223,0.28);
+  --green-glow-lg: 0 0 60px rgba(0,160,223,0.2);
+  --white:     #F0F5FA;
+  --gray:      #7A90A8;
+  --gray-dark: #1A3550;
+  --red:       #FF5A5A;
+  --blue:      #003865;
+  --gold:      #F5A623;
+  --sans:      'Inter', system-ui, sans-serif;
+  --radius:    16px;
+  --radius-lg: 24px;
+  --nav-bg:    rgba(3,13,26,0.75);
+  --border:    rgba(255,255,255,0.07);
+  --text:      var(--white);
+}
+
+/* ── LIGHT MODE ───────────────────────────── */
+html.light {
+  --bg:        #F0F5FA;
+  --bg1:       #E6EEF7;
+  --bg2:       #FFFFFF;
+  --bg3:       #D8E8F5;
+  --green:     #0065AC;
+  --green-dim: rgba(0,101,172,0.1);
+  --green-glow: 0 0 20px rgba(0,101,172,0.2);
+  --green-glow-lg: 0 0 40px rgba(0,101,172,0.15);
+  --white:     #1A2A3A;
+  --gray:      #5A7080;
+  --gray-dark: #C5D8E8;
+  --red:       #D94040;
+  --blue:      #003865;
+  --gold:      #C47F00;
+  --nav-bg:    rgba(240,245,250,0.85);
+  --border:    rgba(0,56,101,0.1);
+  --text:      #1A2A3A;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ──────────────────────────────────── */
+nav#topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px clamp(24px,5vw,80px);
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.nav-logo span { color: #00C4FF; }
+.nav-pills {
+  display: flex;
+  gap: 8px;
+}
+.nav-pill {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--gray-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.nav-pill:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+.nav-pill.cta-pill {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+  font-weight: 600;
+}
+.nav-pill.cta-pill:hover { box-shadow: var(--green-glow); }
+.theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--gray);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.theme-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: var(--green-glow);
+}
+
+/* ── HERO ─────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px clamp(24px,6vw,100px) 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,160,223,0.07) 0%, transparent 70%);
+  top: 10%; right: -100px;
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--green);
+}
+.hero-title {
+  font-size: clamp(56px, 9vw, 120px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 40px;
+  max-width: 900px;
+}
+.hero-title .accent { color: #00C4FF; }
+
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gray);
+}
+.hero-meta-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+}
+.hero-meta-item strong { color: var(--white); font-weight: 500; }
+
+.hero-cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-stat-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius);
+  padding: 20px 28px;
+  min-width: 160px;
+  transition: all 0.3s;
+}
+.hero-stat-card:hover {
+  border-color: rgba(0,160,223,0.3);
+  background: var(--green-dim);
+}
+.hero-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+.hero-stat-val {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.hero-stat-val.green { color: var(--green); }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: bounce 2.2s ease-in-out infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, var(--gray-dark), transparent);
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── SECTION BASE ─────────────────────────── */
+section.page-section {
+  padding: clamp(72px,10vh,120px) clamp(24px,6vw,100px);
+  transition: background 0.4s;
+}
+section.page-section.alt { background: var(--bg1); }
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  display: block;
+  width: 20px; height: 1px;
+  background: var(--green);
+}
+
+.big-title {
+  font-size: clamp(40px,6vw,80px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 48px;
+}
+
+/* ── GLASS CARD ───────────────────────────── */
+.glass {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.glass:hover {
+  border-color: rgba(0,160,223,0.2);
+  transform: translateY(-2px);
+}
+
+/* ── DIAGNÓSTICO ──────────────────────────── */
+.diag-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.diag-col {
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.diag-col:hover { transform: translateY(-3px); }
+.diag-col::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.diag-col.verde::before { background: var(--green); }
+.diag-col.rojo::before  { background: var(--red); }
+.diag-col.azul::before  { background: var(--blue); }
+
+.diag-col-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.diag-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.verde .diag-icon { background: rgba(0,160,223,0.12); color: var(--green); }
+.rojo  .diag-icon { background: rgba(255,68,68,0.12); color: var(--red); }
+.azul  .diag-icon { background: rgba(74,158,255,0.12); color: var(--blue); }
+
+.diag-col-head-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.diag-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  align-items: flex-start;
+}
+.diag-bullet {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.verde .diag-bullet { background: var(--green); }
+.rojo  .diag-bullet { background: var(--red); }
+.azul  .diag-bullet { background: var(--blue); }
+.diag-item p { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.7); }
+
+.diag-quote {
+  background: var(--bg2);
+  border: 1px solid rgba(0,160,223,0.15);
+  border-radius: var(--radius-lg);
+  padding: 36px 48px;
+  text-align: center;
+  position: relative;
+}
+.diag-quote::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,160,223,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.diag-quote p {
+  font-size: clamp(18px,2vw,26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  line-height: 1.4;
+}
+.diag-quote p::before { content: '"'; color: var(--green); margin-right: 4px; }
+.diag-quote p::after  { content: '"'; color: var(--green); margin-left: 4px; }
+
+/* ── SALUD ────────────────────────────────── */
+.salud-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.salud-main {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.salud-main::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,160,223,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.salud-stat { margin-bottom: 32px; }
+.salud-stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 4px;
+}
+.salud-stat-val {
+  font-family: Georgia, serif;
+  font-size: clamp(28px,3vw,44px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  line-height: 1;
+}
+.salud-stat-sub { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+.salud-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 28px 0; }
+
+.familia-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.familia-chip {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 100px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.familia-chip-uf {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.salud-coberturas {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.salud-coberturas-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 24px;
+}
+.cob-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  transition: color 0.2s;
+}
+.cob-item:last-child { border-bottom: none; }
+.cob-item:hover { color: var(--white); }
+.cob-check {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--green-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cob-check::after {
+  content: '';
+  width: 5px; height: 8px;
+  border-right: 1.5px solid var(--green);
+  border-bottom: 1.5px solid var(--green);
+  transform: rotate(45deg) translate(-1px,-1px);
+}
+
+/* ── INTEGRAL ─────────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+.tog-btn {
+  padding: 10px 28px;
+  border-radius: 100px;
+  border: 1px solid var(--gray-dark);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all 0.2s;
+}
+.tog-btn.active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+  box-shadow: var(--green-glow);
+}
+.tog-btn:not(.active):hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  padding: 22px;
+  transition: all 0.25s;
+}
+.stat-box:hover {
+  border-color: rgba(0,160,223,0.2);
+  background: rgba(0,160,223,0.03);
+}
+.stat-box-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+.stat-box-val {
+  font-family: Georgia, serif;
+  font-size: clamp(18px,2vw,28px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.stat-box-val.green { color: var(--green); }
+.stat-box-sub { font-size: 11px; color: var(--gray); }
+
+/* EXPLAINER CARDS */
+.explainer-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.exp-card {
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.exp-card.basica {
+  background: var(--bg3);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.exp-card.ahorro {
+  background: var(--green-dim);
+  border: 1px solid rgba(0,160,223,0.2);
+}
+.exp-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.basica .exp-tag {
+  background: rgba(255,255,255,0.07);
+  color: var(--gray);
+}
+.ahorro .exp-tag {
+  background: rgba(0,160,223,0.12);
+  color: var(--green);
+}
+.exp-amount-val {
+  font-family: Georgia, serif;
+  font-size: clamp(24px,2.5vw,36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--white);
+}
+.ahorro .exp-amount-val { color: var(--green); }
+.exp-amount-sub { font-size: 11px; color: var(--gray); }
+.exp-desc {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--gray);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 14px;
+}
+.exp-desc strong { color: var(--white); font-weight: 600; }
+.ahorro .exp-desc { border-color: rgba(0,160,223,0.1); }
+.ahorro .exp-desc strong { color: var(--green); }
+
+.chart-box {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin-bottom: 16px;
+}
+.chart-box-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+.chart-box-sub { font-size: 12px; color: var(--gray); margin-bottom: 24px; }
+.chart-h { height: 240px; position: relative; }
+
+.tabla-box {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.tabla-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 14px 24px;
+  background: rgba(0,160,223,0.06);
+  border-bottom: 1px solid rgba(0,160,223,0.1);
+}
+.tabla-head span {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.tabla-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: center;
+  transition: background 0.2s;
+}
+.tabla-row:hover { background: rgba(255,255,255,0.02); }
+.tabla-row:last-child { border-bottom: none; }
+.t-year { font-size: 12px; font-weight: 600; color: var(--gray); }
+.t-val {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.t-val.green { color: var(--green); }
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,160,223,0.1);
+  border: 1px solid rgba(0,160,223,0.2);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin: 14px 24px;
+}
+
+/* ── JUBILACIÓN ───────────────────────────── */
+#jubilacion { background: var(--bg1); }
+.jub-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: clamp(20px,3vw,48px);
+  height: 300px;
+  margin-bottom: 36px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.jub-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+.jub-bar-amount {
+  font-family: Georgia, serif;
+  font-size: clamp(16px,2vw,26px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  text-align: center;
+}
+.jub-bar {
+  width: 100%;
+  max-width: 72px;
+  border-radius: 8px 8px 0 0;
+  height: 0;
+  transition: height 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+.jub-bar.b1 { background: var(--bg3); border: 1px solid rgba(255,255,255,0.1); }
+.jub-bar.b2 { background: rgba(74,158,255,0.5); }
+.jub-bar.b3 {
+  background: var(--green);
+  box-shadow: var(--green-glow);
+}
+.jub-bar-label {
+  font-size: 12px;
+  color: var(--gray);
+  text-align: center;
+  line-height: 1.4;
+}
+.jub-brecha {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.jub-brecha-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); margin-bottom: 6px; }
+.jub-brecha-val {
+  font-family: Georgia, serif;
+  font-size: clamp(24px,3vw,40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--gold);
+}
+.jub-brecha-text { font-size: 14px; color: var(--gray); max-width: 400px; line-height: 1.6; }
+.jub-brecha-text strong { color: var(--white); }
+
+/* ── PRESUPUESTO ──────────────────────────── */
+.budget-rows {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.budget-row:last-child { border-bottom: none; }
+.budget-row:hover { background: rgba(255,255,255,0.02); }
+.budget-row-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+.budget-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); opacity: 0.5; }
+.budget-price {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.budget-total-bar {
+  background: var(--green);
+  /* MetLife blue accent */
+  border-radius: var(--radius);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.budget-total-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.budget-total-val {
+  font-family: Georgia, serif;
+  font-size: clamp(22px,2.5vw,36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.budget-rem { text-align: right; padding: 8px 28px; font-size: 13px; }
+.budget-rem .lbl { color: var(--gray); margin-right: 6px; }
+.budget-rem .pos { color: var(--green); font-weight: 600; }
+.budget-rem .neg { color: var(--red); font-weight: 600; }
+
+/* ── CTA ──────────────────────────────────── */
+#cta { background: var(--bg); }
+.cta-inner {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: calc(var(--radius-lg)*1.5);
+  padding: clamp(48px,6vw,80px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-inner::before {
+  content: '';
+  position: absolute;
+  left: -100px; bottom: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,160,223,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-title {
+  font-size: clamp(32px,5vw,68px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.cta-title span { color: #00C4FF; }
+.cta-sub { font-size: 15px; color: var(--gray); line-height: 1.6; max-width: 440px; }
+
+.btn-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--green);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: var(--green-glow);
+}
+.btn-wa:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--green-glow-lg);
+}
+.asesor-card {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--gray);
+  line-height: 1.7;
+}
+.asesor-card strong { color: rgba(255,255,255,0.6); }
+
+/* ── FOOTER ───────────────────────────────── */
+footer {
+  background: var(--bg1);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 28px clamp(24px,6vw,100px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-legal { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.7; max-width: 720px; }
+.footer-date { font-size: 10px; color: rgba(255,255,255,0.15); }
+
+/* ── LIGHT MODE OVERRIDES ────────────────── */
+html.light .hero-title,
+html.light .big-title,
+html.light .diag-item p,
+html.light .cob-item,
+html.light .salud-stat-val,
+html.light .stat-box-val,
+html.light .exp-amount-val,
+html.light .jub-bar-amount,
+html.light .budget-price,
+html.light .t-val { color: #1A2A3A; }
+html.light .diag-col { background: #fff; box-shadow: 0 2px 16px rgba(0,56,101,0.07); }
+html.light .salud-main,
+html.light .salud-coberturas,
+html.light .stat-box,
+html.light .chart-box,
+html.light .tabla-box,
+html.light .budget-rows,
+html.light .jub-brecha,
+html.light .cta-inner { background: #fff; border-color: rgba(0,56,101,0.1); }
+html.light .diag-quote { background: #fff; }
+html.light .exp-card.basica { background: #EEF4FB; border-color: rgba(0,101,172,0.15); }
+html.light .exp-card.ahorro { background: rgba(0,101,172,0.06); }
+html.light .hero-stat-card { background: rgba(0,56,101,0.06); border-color: rgba(0,56,101,0.12); }
+html.light .tabla-head { background: rgba(0,101,172,0.08); border-bottom-color: rgba(0,101,172,0.12); }
+html.light footer { background: #E0EBF5; border-top-color: rgba(0,56,101,0.1); }
+html.light .footer-legal { color: rgba(0,56,101,0.35); }
+html.light .footer-date { color: rgba(0,56,101,0.25); }
+html.light .section-alt-override,
+html.light section.page-section.alt { background: #E6EEF7; }
+
+/* ── ANIMATIONS ───────────────────────────── */
+.fu {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.fu.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ───────────────────────────── */
+@media (max-width: 768px) {
+  .diag-grid, .salud-layout, .explainer-row, .stats-row { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  .jub-bars { gap: 12px; }
+  nav#topnav .nav-pills { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="topnav">
+  <div class="nav-logo">Met<span>Life</span> · Hugo Irribarra</div>
+  <div class="nav-pills">
+    <a class="nav-pill" href="#diagnostico">Diagnóstico</a>
+    <a class="nav-pill" href="#integral">Plan</a>
+    <a class="nav-pill" href="#jubilacion">Jubilación</a>
+    <a class="nav-pill cta-pill" id="nav-wa" href="#">WhatsApp</a>
+    <button class="theme-btn" id="theme-toggle" title="Cambiar modo" onclick="toggleTheme()">🌙</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-label">MetLife Chile · Propuesta personalizada</div>
+  <h1 class="hero-title">Tu plan.<br><span class="accent">Empieza hoy.</span></h1>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div><strong>Hugo Irribarra</strong></div>
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div>27 años · Ingeniero IT · Valdivia</div>
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div>Papá de Olivia</div>
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div>Preparado por Felipe Guerra · Abril 2026</div>
+  </div>
+  <div class="hero-cards">
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Protección Vida</div>
+      <div class="hero-stat-val">$159.200.000</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Meta ahorro</div>
+      <div class="hero-stat-val green">$20.000.000</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Familia protegida</div>
+      <div class="hero-stat-val">3 personas</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Desde</div>
+      <div class="hero-stat-val">$500.000<span style="font-size:14px;color:var(--gray);font-weight:400">/mes</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Explorar</div>
+</section>
+
+<!-- DIAGNÓSTICO -->
+<section id="diagnostico" class="page-section alt">
+  <div class="eyebrow">Tu situación</div>
+  <h2 class="big-title">Diagnóstico</h2>
+
+  <div class="diag-grid">
+    <div class="diag-col verde fu">
+      <div class="diag-col-head">
+        <div class="diag-icon">✓</div>
+        <span class="diag-col-head-label">Lo que funciona</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sueldo estable $2M líquido</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Cultura financiera — Fintual, Racional</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Fondo común con Catalina al 4%</p></div>
+    </div>
+    <div class="diag-col rojo fu" style="transition-delay:.1s">
+      <div class="diag-col-head">
+        <div class="diag-icon">!</div>
+        <span class="diag-col-head-label">Lo que falta</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin seguros — Olivia nació hace 1 semana</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin protección de vida para su familia</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Ahorro en pesos pierde contra la UF</p></div>
+    </div>
+    <div class="diag-col azul fu" style="transition-delay:.2s">
+      <div class="diag-col-head">
+        <div class="diag-icon">→</div>
+        <span class="diag-col-head-label">Tu meta</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Pie departamento $20M en 5 años</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Proteger a Catalina y Olivia</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Jubilar sin depender 100% de la AFP</p></div>
+    </div>
+  </div>
+
+  <div class="diag-quote fu" style="transition-delay:.3s">
+    <p>Tienes la mentalidad correcta — ahora necesitas el instrumento correcto.</p>
+  </div>
+</section>
+
+<!-- SALUD TOTAL -->
+<section id="salud" class="page-section">
+  <div class="eyebrow">Cobertura médica</div>
+  <h2 class="big-title">Salud Total</h2>
+
+  <div class="salud-layout">
+    <div class="salud-main fu">
+      <div class="salud-stat">
+        <div class="salud-stat-label">Capital asegurado</div>
+        <div class="salud-stat-val">UF 30.000</div>
+        <div class="salud-stat-sub">Cobertura hospitalaria completa</div>
+      </div>
+      <div class="salud-stat">
+        <div class="salud-stat-label">Prima mensual familia</div>
+        <div class="salud-stat-val">$81.655</div>
+        <div class="salud-stat-sub">Los tres protegidos</div>
+      </div>
+      <div class="salud-stat">
+        <div class="salud-stat-label">Costo diario</div>
+        <div class="salud-stat-val">$2.722</div>
+        <div class="salud-stat-sub">Deducible: UF 50 ($2.001.350)</div>
+      </div>
+      <div class="salud-divider"></div>
+      <div class="familia-row">
+        <div class="familia-chip">Hugo · <span class="familia-chip-uf">UF 0,73</span></div>
+        <div class="familia-chip">Catalina · <span class="familia-chip-uf">UF 0,73</span></div>
+        <div class="familia-chip">Olivia · <span class="familia-chip-uf">UF 0,58</span></div>
+      </div>
+    </div>
+
+    <div class="salud-coberturas fu" style="transition-delay:.12s">
+      <div class="salud-coberturas-title">Coberturas incluidas</div>
+      <div class="cob-item"><div class="cob-check"></div>Hospitalización ilimitada</div>
+      <div class="cob-item"><div class="cob-check"></div>Urgencias 24/7</div>
+      <div class="cob-item"><div class="cob-check"></div>Maternidad completa</div>
+      <div class="cob-item"><div class="cob-check"></div>Enfermedades catastróficas</div>
+      <div class="cob-item"><div class="cob-check"></div>Cuidados intensivos sin límite</div>
+      <div class="cob-item"><div class="cob-check"></div>Cobertura internacional</div>
+      <div class="cob-item"><div class="cob-check"></div>Medicamentos hospitalizados</div>
+      <div class="cob-item"><div class="cob-check"></div>Trasplantes incluidos</div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN INTEGRAL -->
+<section id="integral" class="page-section alt">
+  <div class="eyebrow">Vida + Ahorro</div>
+  <h2 class="big-title">Plan Integral</h2>
+
+  <!-- EXPLAINER CARDS -->
+  <div class="explainer-row fu">
+    <div class="exp-card basica">
+      <div class="exp-tag">Prima Básica</div>
+      <div>
+        <div class="exp-amount-val" id="exp-basica-val"></div>
+        <div class="exp-amount-sub" id="exp-basica-sub"></div>
+      </div>
+      <div class="exp-desc">Cubre el costo de tu <strong>protección de vida y PACI</strong> — es la prima que paga tu seguro. Esta parte no se acumula, pero te da cobertura desde el día uno.</div>
+    </div>
+    <div class="exp-card ahorro">
+      <div class="exp-tag">Prima Ahorro en Exceso</div>
+      <div>
+        <div class="exp-amount-val" id="exp-ahorro-val"></div>
+        <div class="exp-amount-sub" id="exp-ahorro-sub"></div>
+      </div>
+      <div class="exp-desc">Lo que tú decides ahorrar <strong>por sobre la protección</strong>. Se invierte en UF, crece con el tiempo y lo puedes rescatar. Aquí está el motor de tu meta de <strong>$20M.</strong></div>
+    </div>
+  </div>
+
+  <!-- TOGGLE -->
+  <div class="toggle-row">
+    <button class="tog-btn active" id="btn-a" onclick="setOp('A')">Opción A · $500.000/mes</button>
+    <button class="tog-btn" id="btn-b" onclick="setOp('B')">Opción B · $899.000/mes</button>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-row">
+    <div class="stat-box fu">
+      <div class="stat-box-label">Protección Vida + PACI</div>
+      <div class="stat-box-val">$159.200.000</div>
+      <div class="stat-box-sub">UF 4.000</div>
+    </div>
+    <div class="stat-box fu" style="transition-delay:.08s">
+      <div class="stat-box-label">Premio permanencia</div>
+      <div class="stat-box-val">$329.348</div>
+      <div class="stat-box-sub">UF 8,26 en año 10</div>
+    </div>
+    <div class="stat-box fu" style="transition-delay:.16s">
+      <div class="stat-box-label">Prima ahorro mensual</div>
+      <div class="stat-box-val" id="sb-ahorro-val"></div>
+      <div class="stat-box-sub" id="sb-ahorro-sub"></div>
+    </div>
+    <div class="stat-box fu" style="transition-delay:.24s">
+      <div class="stat-box-label">Valor acumulado año 10</div>
+      <div class="stat-box-val green" id="sb-y10-val"></div>
+      <div class="stat-box-sub" id="sb-y10-sub"></div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-box fu">
+    <div class="chart-box-title">Proyección de ahorro acumulado</div>
+    <div class="chart-box-sub">Pesos acumulados · Años 0–10 · Línea punteada = Meta $20.000.000</div>
+    <div class="chart-h"><canvas id="chartMain"></canvas></div>
+  </div>
+
+  <!-- TABLA -->
+  <div class="tabla-box fu">
+    <div class="tabla-head">
+      <span>Año</span><span>UF acumuladas</span><span>En pesos</span><span>vs. Meta $20M</span>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 1</div>
+      <div class="t-val" id="t1-uf"></div>
+      <div class="t-val" id="t1-clp"></div>
+      <div class="t-val" id="t1-pct" style="font-size:12px;color:var(--gray)"></div>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 2</div>
+      <div class="t-val" id="t2-uf"></div>
+      <div class="t-val" id="t2-clp"></div>
+      <div class="t-val" id="t2-pct" style="font-size:12px;color:var(--gray)"></div>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 4</div>
+      <div class="t-val" id="t4-uf"></div>
+      <div class="t-val" id="t4-clp"></div>
+      <div class="t-val" id="t4-pct" style="font-size:12px;color:var(--gray)"></div>
+    </div>
+    <div class="meta-tag" id="meta-tag"></div>
+  </div>
+</section>
+
+<!-- JUBILACIÓN -->
+<section id="jubilacion" class="page-section">
+  <div class="eyebrow">Largo plazo</div>
+  <h2 class="big-title">Tu jubilación</h2>
+
+  <div class="jub-bars">
+    <div class="jub-bar-wrap">
+      <div class="jub-bar-amount">$1.383.000</div>
+      <div class="jub-bar b1" id="jb1"></div>
+      <div class="jub-bar-label">Solo AFP</div>
+    </div>
+    <div class="jub-bar-wrap">
+      <div class="jub-bar-amount">$2.012.000</div>
+      <div class="jub-bar b2" id="jb2"></div>
+      <div class="jub-bar-label">AFP + APV<br>$100k/mes</div>
+    </div>
+    <div class="jub-bar-wrap">
+      <div class="jub-bar-amount">$2.891.000</div>
+      <div class="jub-bar b3" id="jb3"></div>
+      <div class="jub-bar-label">AFP + APV<br>$240k/mes</div>
+    </div>
+  </div>
+
+  <div class="jub-brecha">
+    <div>
+      <div class="jub-brecha-label">Brecha vs. ingreso actual</div>
+      <div class="jub-brecha-val">$617.000</div>
+    </div>
+    <div class="jub-brecha-text">
+      Sin APV, tu pensión estimada cae <strong>$617.000</strong> por mes respecto a tu ingreso actual. El plan integral complementa tu AFP para reducir esta brecha.
+    </div>
+  </div>
+</section>
+
+<!-- PRESUPUESTO -->
+<section id="presupuesto" class="page-section alt">
+  <div class="eyebrow">Resumen económico</div>
+  <h2 class="big-title">Presupuesto</h2>
+
+  <div class="budget-rows">
+    <div class="budget-row">
+      <div class="budget-row-name"><div class="budget-dot"></div>Salud Total — familia completa</div>
+      <div class="budget-price">$81.655</div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-name"><div class="budget-dot"></div>Plan Integral — Vida + PACI</div>
+      <div class="budget-price" id="bp-integral"></div>
+    </div>
+  </div>
+
+  <div class="budget-total-bar">
+    <div class="budget-total-label">Total mensual</div>
+    <div class="budget-total-val" id="bp-total"></div>
+  </div>
+
+  <div class="budget-rem">
+    <span class="lbl">Remanente (sobre $2M líquido):</span>
+    <span id="bp-rem"></span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="page-section">
+  <div class="cta-inner">
+    <div>
+      <h2 class="cta-title">¿Listo para<br><span>empezar?</span></h2>
+      <p class="cta-sub">Tu plan está diseñado. Solo falta una reunión de 30 minutos para formalizarlo y proteger a tu familia desde hoy.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:20px">
+      <a class="btn-wa" id="wa-link" href="#" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10c0 1.54.42 2.98 1.15 4.22L2 18l3.9-1.12A7.94 7.94 0 0010 18c4.42 0 8-3.58 8-8s-3.58-8-8-8zm4.43 11.14c-.19.52-1.11 1-1.52 1.04-.4.05-.79.22-2.65-.55-2.22-.93-3.64-3.19-3.75-3.34-.11-.15-.89-1.18-.89-2.25 0-1.07.56-1.59.76-1.81.2-.22.43-.27.57-.27h.41c.13 0 .31-.05.49.37.19.44.64 1.56.7 1.67.06.11.1.24.02.39-.08.15-.12.24-.24.37-.11.13-.24.29-.34.39-.11.11-.23.23-.1.45.13.22.58.96 1.25 1.56.86.77 1.58 1.01 1.8 1.12.23.11.36.09.49-.06.13-.15.55-.64.7-.86.15-.22.3-.18.5-.11.2.07 1.28.6 1.5.71.22.11.36.17.41.26.05.09.05.52-.14 1.03z" fill="#000"/>
+        </svg>
+        Agendar por WhatsApp
+      </a>
+      <div class="asesor-card">
+        <strong>Felipe Guerra</strong><br>
+        Asesor MetLife · Código 35411051
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-legal">Este documento es una propuesta personalizada preparada con fines informativos. Los valores en UF están calculados con la UF vigente. Las proyecciones son estimaciones basadas en condiciones actuales de mercado y no garantizan rendimiento futuro. MetLife Chile S.A., Compañía de Seguros de Vida. Sujeto a aprobación de suscripción.</div>
+  <div class="footer-date">Abril 2026</div>
+</footer>
+
+<script>
+const UF = 40000;
+const META = 20000000;
+const META_UF = META / UF;
+
+const D = {
+  A: { total: 500000, ahorro: 10.00, y1: 125.59, y2: 264.01, y4: 547.89, y10: 1546.32, metaAno: 'Año 4' },
+  B: { total: 899000, ahorro: 20.00, y1: 248.09, y2: 513.75, y4: 1067.08, y10: 3008.24, metaAno: 'Año 2' },
+  salud: 81655,
+  ingreso: 2000000,
+  wa: '56935411051',
+};
+
+let op = 'A';
+let chart = null;
+
+const fmt = n => '$' + Math.round(n).toLocaleString('es-CL');
+const fmtUF = n => 'UF ' + n.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+function refresh() {
+  const d = D[op];
+  const ahorroCLP = d.ahorro * UF;
+  const basica = d.total - ahorroCLP;
+
+  // Explainer
+  document.getElementById('exp-basica-val').textContent = fmt(basica);
+  document.getElementById('exp-basica-sub').textContent = 'Prima mensual de protección';
+  document.getElementById('exp-ahorro-val').textContent = fmt(ahorroCLP);
+  document.getElementById('exp-ahorro-sub').textContent = fmtUF(d.ahorro) + '/mes · se acumula';
+
+  // Stat boxes
+  document.getElementById('sb-ahorro-val').textContent = fmt(ahorroCLP);
+  document.getElementById('sb-ahorro-sub').textContent = fmtUF(d.ahorro) + '/mes';
+  document.getElementById('sb-y10-val').textContent = fmt(d.y10 * UF);
+  document.getElementById('sb-y10-sub').textContent = fmtUF(d.y10);
+
+  // Tabla
+  const rows = [{id:'t1',v:d.y1},{id:'t2',v:d.y2},{id:'t4',v:d.y4}];
+  rows.forEach(r => {
+    document.getElementById(r.id+'-uf').textContent = fmtUF(r.v);
+    document.getElementById(r.id+'-clp').textContent = fmt(r.v * UF);
+    document.getElementById(r.id+'-pct').textContent = Math.round(r.v/META_UF*100) + '% meta';
+  });
+  document.getElementById('meta-tag').textContent = '★ Meta $20M alcanzada en ' + d.metaAno;
+
+  // Chart
+  const labels = ['Año 0','Año 1','Año 2','Año 3','Año 4','Año 5','Año 6','Año 7','Año 8','Año 9','Año 10'];
+  const vals = [0, d.y1, d.y2,
+    d.y2+(d.y4-d.y2)/2, d.y4,
+    d.y4+(d.y10-d.y4)/6,
+    d.y4+(d.y10-d.y4)*2/6,
+    d.y4+(d.y10-d.y4)*3/6,
+    d.y4+(d.y10-d.y4)*4/6,
+    d.y4+(d.y10-d.y4)*5/6,
+    d.y10
+  ].map(v => v * UF);
+  const metaLine = new Array(11).fill(META);
+
+  if (chart) {
+    chart.data.datasets[0].data = vals;
+    chart.update('active');
+    return;
+  }
+
+  const ctx = document.getElementById('chartMain').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Ahorro acumulado',
+          data: vals,
+          borderColor: '#00A0DF',
+          backgroundColor: 'rgba(0,160,223,0.06)',
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointBackgroundColor: '#00A0DF',
+          pointBorderColor: '#0A0B09',
+          pointBorderWidth: 2,
+          fill: true,
+          tension: 0.4,
+        },
+        {
+          label: 'Meta $20M',
+          data: metaLine,
+          borderColor: 'rgba(255,255,255,0.2)',
+          borderWidth: 1.5,
+          borderDash: [6,4],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: '#8A8A8A',
+            font: { family: 'Inter', size: 12 },
+            boxWidth: 16, padding: 16
+          }
+        },
+        tooltip: {
+          backgroundColor: '#1D1E1B',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#8A8A8A',
+          bodyColor: '#F5F5F5',
+          callbacks: {
+            label: c => c.datasetIndex === 0
+              ? ' ' + fmt(c.parsed.y)
+              : ' Meta: ' + fmt(c.parsed.y)
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#8A8A8A', font: { family: 'Inter', size: 12 } }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#8A8A8A',
+            font: { family: 'Inter', size: 12 },
+            callback: v => '$' + (v/1000000).toFixed(1) + 'M'
+          }
+        }
+      }
+    }
+  });
+}
+
+function refreshBudget() {
+  const d = D[op];
+  const total = D.salud + d.total;
+  const rem = D.ingreso - total;
+  document.getElementById('bp-integral').textContent = fmt(d.total);
+  document.getElementById('bp-total').textContent = fmt(total);
+  const remEl = document.getElementById('bp-rem');
+  remEl.innerHTML = `<span class="${rem>=0?'pos':'neg'}">${(rem>=0?'+':'')+fmt(rem)}</span>`;
+}
+
+function setOp(o) {
+  op = o;
+  document.getElementById('btn-a').classList.toggle('active', o==='A');
+  document.getElementById('btn-b').classList.toggle('active', o==='B');
+  refresh();
+  refreshBudget();
+}
+
+// WhatsApp
+const waMsg = encodeURIComponent('Hola Felipe, soy Hugo. Revisé mi propuesta y quiero agendar una reunión para avanzar.');
+const waUrl = `https://wa.me/${D.wa}?text=${waMsg}`;
+document.getElementById('wa-link').href = waUrl;
+document.getElementById('nav-wa').href = waUrl;
+
+// Jubilación bars
+function animateJub() {
+  const vals = [1383000, 2012000, 2891000];
+  const maxH = 220;
+  const max = Math.max(...vals);
+  vals.forEach((v,i) => {
+    setTimeout(() => {
+      document.getElementById('jb'+(i+1)).style.height = Math.round(v/max*maxH) + 'px';
+    }, 150*i + 200);
+  });
+}
+
+// Intersection Observer
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (e.target.id === 'jubilacion') animateJub();
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fu').forEach(el => io.observe(el));
+io.observe(document.getElementById('jubilacion'));
+
+// Theme toggle
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isLight ? '🌙' : '🌙';
+  document.getElementById('theme-toggle').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  // Rebuild chart with new colors
+  if (chart) { chart.destroy(); chart = null; }
+  refresh();
+}
+// Restore saved theme
+(function(){
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-toggle').textContent = '☀️';
+  }
+})();
+
+// Init
+refresh();
+refreshBudget();
+</script>
+</body>
+</html>

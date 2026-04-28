@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetLife · Adriana Rivera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #030D1A;
+  --bg1:       #071525;
+  --bg2:       #0D1F35;
+  --bg3:       #132840;
+  --green:     #00A0DF;
+  --green-dim: rgba(0,160,223,0.12);
+  --green-glow: 0 0 30px rgba(0,160,223,0.28);
+  --green-glow-lg: 0 0 60px rgba(0,160,223,0.2);
+  --white:     #F0F5FA;
+  --gray:      #7A90A8;
+  --gray-dark: #1A3550;
+  --red:       #FF5A5A;
+  --blue:      #003865;
+  --gold:      #F5A623;
+  --sans:      'Inter', system-ui, sans-serif;
+  --radius:    16px;
+  --radius-lg: 24px;
+  --nav-bg:    rgba(3,13,26,0.75);
+  --border:    rgba(255,255,255,0.07);
+  --text:      var(--white);
+}
+
+html.light {
+  --bg:        #F0F5FA;
+  --bg1:       #E6EEF7;
+  --bg2:       #FFFFFF;
+  --bg3:       #D8E8F5;
+  --green:     #0065AC;
+  --green-dim: rgba(0,101,172,0.1);
+  --green-glow: 0 0 20px rgba(0,101,172,0.2);
+  --green-glow-lg: 0 0 40px rgba(0,101,172,0.15);
+  --white:     #1A2A3A;
+  --gray:      #5A7080;
+  --gray-dark: #C5D8E8;
+  --red:       #D94040;
+  --blue:      #003865;
+  --gold:      #C47F00;
+  --nav-bg:    rgba(240,245,250,0.85);
+  --border:    rgba(0,56,101,0.1);
+  --text:      #1A2A3A;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ──────────────────────────────────── */
+nav#topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px clamp(24px,5vw,80px);
+  background: var(--nav-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-logo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.nav-logo span { color: #00C4FF; }
+.nav-pills { display: flex; gap: 8px; }
+.nav-pill {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray);
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--gray-dark);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.nav-pill:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+.nav-pill.cta-pill {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+  font-weight: 600;
+}
+.nav-pill.cta-pill:hover { box-shadow: var(--green-glow); }
+.theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--gray);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { border-color: var(--green); color: var(--green); box-shadow: var(--green-glow); }
+
+/* ── HERO ─────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 140px clamp(24px,6vw,100px) 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,160,223,0.07) 0%, transparent 70%);
+  top: 10%; right: -100px;
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 24px; height: 1px;
+  background: var(--green);
+}
+.hero-title {
+  font-size: clamp(56px, 9vw, 120px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 40px;
+  max-width: 900px;
+}
+.hero-title .accent { color: #00C4FF; }
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.hero-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--gray);
+}
+.hero-meta-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.hero-meta-item strong { color: var(--white); font-weight: 500; }
+
+/* Urgency badge */
+.urgency-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(245,166,35,0.1);
+  border: 1px solid rgba(245,166,35,0.35);
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 100px;
+  margin-bottom: 32px;
+  animation: badgePulse 2.5s ease-in-out infinite;
+  width: fit-content;
+}
+.urgency-badge-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: dotBlink 1.2s ease-in-out infinite;
+}
+@keyframes badgePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(245,166,35,0.15); }
+  50% { box-shadow: 0 0 0 10px rgba(245,166,35,0); }
+}
+@keyframes dotBlink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.hero-cards {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-stat-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius);
+  padding: 20px 28px;
+  min-width: 160px;
+  transition: all 0.3s;
+}
+.hero-stat-card:hover { border-color: rgba(0,160,223,0.3); background: var(--green-dim); }
+.hero-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+.hero-stat-val {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.hero-stat-val.green { color: var(--green); }
+.hero-stat-val.gold { color: var(--gold); }
+
+.scroll-hint {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--gray);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  animation: bounce 2.2s ease-in-out infinite;
+}
+.scroll-hint::after {
+  content: '';
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, var(--gray-dark), transparent);
+}
+@keyframes bounce {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ── SECTION BASE ─────────────────────────── */
+section.page-section {
+  padding: clamp(72px,10vh,120px) clamp(24px,6vw,100px);
+  transition: background 0.4s;
+}
+section.page-section.alt { background: var(--bg1); }
+
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--green); }
+
+.big-title {
+  font-size: clamp(40px,6vw,80px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 48px;
+}
+
+/* ── GLASS CARD ───────────────────────────── */
+.glass {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.glass:hover { border-color: rgba(0,160,223,0.2); transform: translateY(-2px); }
+
+/* ── DIAGNÓSTICO ──────────────────────────── */
+.diag-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.diag-col {
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.diag-col:hover { transform: translateY(-3px); }
+.diag-col::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.diag-col.verde::before { background: var(--green); }
+.diag-col.rojo::before  { background: var(--red); }
+.diag-col.azul::before  { background: #4A9EFF; }
+
+.diag-col-head { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+.diag-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.verde .diag-icon { background: rgba(0,160,223,0.12); color: var(--green); }
+.rojo  .diag-icon { background: rgba(255,90,90,0.12); color: var(--red); }
+.azul  .diag-icon { background: rgba(74,158,255,0.12); color: #4A9EFF; }
+
+.diag-col-head-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); }
+
+.diag-item { display: flex; gap: 10px; margin-bottom: 14px; align-items: flex-start; }
+.diag-bullet { width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+.verde .diag-bullet { background: var(--green); }
+.rojo  .diag-bullet { background: var(--red); }
+.azul  .diag-bullet { background: #4A9EFF; }
+.diag-item p { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.7); }
+
+.diag-quote {
+  background: var(--bg2);
+  border: 1px solid rgba(0,160,223,0.15);
+  border-radius: var(--radius-lg);
+  padding: 36px 48px;
+  text-align: center;
+  position: relative;
+}
+.diag-quote::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,160,223,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.diag-quote p {
+  font-size: clamp(18px,2vw,26px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  line-height: 1.4;
+}
+.diag-quote p::before { content: '"'; color: var(--green); margin-right: 4px; }
+.diag-quote p::after  { content: '"'; color: var(--green); margin-left: 4px; }
+
+/* ── TOGGLE ───────────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 36px;
+}
+.tog-btn {
+  padding: 10px 28px;
+  border-radius: 100px;
+  border: 1px solid var(--gray-dark);
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray);
+  transition: all 0.2s;
+}
+.tog-btn.active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+  box-shadow: var(--green-glow);
+}
+.tog-btn:not(.active):hover { border-color: rgba(255,255,255,0.2); color: var(--white); }
+
+/* ── SVA EXPLAINER CARDS ──────────────────── */
+.explainer-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.exp-card {
+  border-radius: var(--radius);
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.exp-card.basica { background: var(--bg3); border: 1px solid rgba(255,255,255,0.08); }
+.exp-card.ahorro { background: var(--green-dim); border: 1px solid rgba(0,160,223,0.2); }
+.exp-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.basica .exp-tag { background: rgba(255,255,255,0.07); color: var(--gray); }
+.ahorro .exp-tag { background: rgba(0,160,223,0.12); color: var(--green); }
+.exp-amount-val {
+  font-family: Georgia, serif;
+  font-size: clamp(24px,2.5vw,36px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--white);
+}
+.ahorro .exp-amount-val { color: var(--green); }
+.exp-amount-sub { font-size: 11px; color: var(--gray); }
+.exp-desc {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--gray);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 14px;
+}
+.exp-desc strong { color: var(--white); font-weight: 600; }
+.ahorro .exp-desc { border-color: rgba(0,160,223,0.1); }
+.ahorro .exp-desc strong { color: var(--green); }
+
+/* ── STAT BOXES ───────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-box {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  padding: 22px;
+  transition: all 0.25s;
+}
+.stat-box:hover { border-color: rgba(0,160,223,0.2); background: rgba(0,160,223,0.03); }
+.stat-box-label { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+.stat-box-val {
+  font-family: Georgia, serif;
+  font-size: clamp(18px,2vw,28px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.stat-box-val.green { color: var(--green); }
+.stat-box-val.gold { color: var(--gold); }
+.stat-box-sub { font-size: 11px; color: var(--gray); }
+
+/* ── CHART & TABLE ────────────────────────── */
+.chart-box {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  margin-bottom: 16px;
+}
+.chart-box-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
+.chart-box-sub { font-size: 12px; color: var(--gray); margin-bottom: 24px; }
+.chart-h { height: 240px; position: relative; }
+
+.tabla-box {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.tabla-head {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr 1.1fr 1fr;
+  padding: 14px 24px;
+  background: rgba(0,160,223,0.06);
+  border-bottom: 1px solid rgba(0,160,223,0.1);
+}
+.tabla-head span { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); }
+.tabla-row {
+  display: grid;
+  grid-template-columns: 0.8fr 1fr 1.1fr 1fr;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: center;
+  transition: background 0.2s;
+}
+.tabla-row:hover { background: rgba(255,255,255,0.02); }
+.tabla-row:last-child { border-bottom: none; }
+.t-year { font-size: 12px; font-weight: 600; color: var(--gray); }
+.t-val { font-family: Georgia, serif; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--white); }
+.t-val.green { color: var(--green); }
+.t-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,160,223,0.1);
+  border: 1px solid rgba(0,160,223,0.2);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,160,223,0.1);
+  border: 1px solid rgba(0,160,223,0.2);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 100px;
+  margin: 14px 24px;
+}
+
+/* ── COBERTURA BADGES ─────────────────────── */
+.cob-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.cob-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  flex: 1;
+  min-width: 180px;
+}
+.cob-badge-check {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--green-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.cob-badge-check::after {
+  content: '';
+  width: 5px; height: 9px;
+  border-right: 2px solid var(--green);
+  border-bottom: 2px solid var(--green);
+  transform: rotate(45deg) translate(-1px,-1px);
+}
+.cob-badge-text { font-size: 13px; color: var(--white); }
+.cob-badge-val { font-family: Georgia, serif; font-size: 15px; font-weight: 700; color: var(--green); }
+
+/* ── APV SECTION ──────────────────────────── */
+.apv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.apv-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.apv-regime-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.regime-card {
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.regime-card.loser {
+  background: var(--bg3);
+  border: 1px solid rgba(255,255,255,0.07);
+  opacity: 0.7;
+}
+.regime-card.winner {
+  background: var(--green-dim);
+  border: 2px solid rgba(0,160,223,0.35);
+}
+.regime-card.winner::after {
+  content: '★ Recomendado';
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--green);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.regime-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 8px;
+}
+.regime-name {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.winner .regime-name { color: var(--green); }
+.regime-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+}
+.regime-row:last-child { border-bottom: none; }
+.winner .regime-row { border-bottom-color: rgba(0,160,223,0.1); }
+.regime-row-label { color: var(--gray); }
+.regime-row-val { font-family: Georgia, serif; font-weight: 700; color: var(--white); }
+.winner .regime-row-val { color: var(--green); }
+
+.apv-info-card {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.apv-info-title { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
+
+.apv-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.apv-tl-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.apv-tl-item:last-child { border-bottom: none; }
+.apv-tl-year {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  min-width: 52px;
+}
+.apv-tl-age {
+  font-size: 10px;
+  color: var(--gray);
+  opacity: 0.6;
+}
+.apv-tl-val {
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+.apv-tl-sub { font-size: 11px; color: var(--gray); margin-top: 2px; }
+
+/* ── PRESUPUESTO ──────────────────────────── */
+.budget-rows {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.budget-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.2s;
+}
+.budget-row:last-child { border-bottom: none; }
+.budget-row:hover { background: rgba(255,255,255,0.02); }
+.budget-row-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+}
+.budget-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); opacity: 0.5; }
+.budget-price { font-family: Georgia, serif; font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: var(--white); }
+.budget-total-bar {
+  background: var(--green);
+  border-radius: var(--radius);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.budget-total-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+.budget-total-val { font-family: Georgia, serif; font-size: clamp(22px,2.5vw,36px); font-weight: 700; letter-spacing: -0.03em; color: #fff; }
+.budget-rem { text-align: right; padding: 8px 28px; font-size: 13px; }
+.budget-rem .lbl { color: var(--gray); margin-right: 6px; }
+.budget-rem .pos { color: var(--green); font-weight: 600; }
+.budget-rem .neg { color: var(--red); font-weight: 600; }
+
+/* ── CTA ──────────────────────────────────── */
+#cta { background: var(--bg); }
+.cta-inner {
+  background: var(--bg2);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: calc(var(--radius-lg)*1.5);
+  padding: clamp(48px,6vw,80px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-inner::before {
+  content: '';
+  position: absolute;
+  left: -100px; bottom: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,160,223,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-title { font-size: clamp(32px,5vw,68px); font-weight: 900; letter-spacing: -0.04em; line-height: 0.95; color: var(--white); margin-bottom: 20px; }
+.cta-title span { color: #00C4FF; }
+.cta-sub { font-size: 15px; color: var(--gray); line-height: 1.6; max-width: 440px; }
+.btn-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--green);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 16px 32px;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: var(--green-glow);
+}
+.btn-wa:hover { transform: translateY(-2px); box-shadow: var(--green-glow-lg); }
+.asesor-card { margin-top: 20px; text-align: center; font-size: 11px; color: var(--gray); line-height: 1.7; }
+.asesor-card strong { color: rgba(255,255,255,0.6); }
+
+/* ── FOOTER ───────────────────────────────── */
+footer {
+  background: var(--bg1);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding: 28px clamp(24px,6vw,100px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.footer-legal { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.7; max-width: 720px; }
+.footer-date { font-size: 10px; color: rgba(255,255,255,0.15); }
+
+/* ── LIGHT MODE OVERRIDES ─────────────────── */
+html.light .hero-title,
+html.light .big-title,
+html.light .diag-item p,
+html.light .stat-box-val,
+html.light .exp-amount-val,
+html.light .budget-price,
+html.light .t-val,
+html.light .apv-tl-val,
+html.light .regime-name,
+html.light .cta-title { color: #1A2A3A; }
+html.light .diag-col { background: #fff; box-shadow: 0 2px 16px rgba(0,56,101,0.07); }
+html.light .stat-box,
+html.light .chart-box,
+html.light .tabla-box,
+html.light .budget-rows,
+html.light .cta-inner,
+html.light .apv-info-card { background: #fff; border-color: rgba(0,56,101,0.1); }
+html.light .diag-quote { background: #fff; }
+html.light .exp-card.basica { background: #EEF4FB; border-color: rgba(0,101,172,0.15); }
+html.light .exp-card.ahorro { background: rgba(0,101,172,0.06); }
+html.light .hero-stat-card { background: rgba(0,56,101,0.06); border-color: rgba(0,56,101,0.12); }
+html.light .tabla-head { background: rgba(0,101,172,0.08); border-bottom-color: rgba(0,101,172,0.12); }
+html.light .regime-card.loser { background: #EEF4FB; }
+html.light .regime-card.winner { background: rgba(0,101,172,0.06); }
+html.light .cob-badge { background: rgba(0,56,101,0.04); border-color: rgba(0,56,101,0.1); }
+html.light footer { background: #E0EBF5; border-top-color: rgba(0,56,101,0.1); }
+html.light .footer-legal { color: rgba(0,56,101,0.35); }
+html.light .footer-date { color: rgba(0,56,101,0.25); }
+html.light section.page-section.alt { background: #E6EEF7; }
+
+/* ── ANIMATIONS ───────────────────────────── */
+.fu {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.fu.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ───────────────────────────── */
+@media (max-width: 900px) {
+  .diag-grid,
+  .apv-grid,
+  .apv-regime-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .explainer-row,
+  .stats-row,
+  .apv-stats { grid-template-columns: 1fr 1fr; }
+  .cta-inner { grid-template-columns: 1fr; }
+  nav#topnav .nav-pills { display: none; }
+}
+@media (max-width: 480px) {
+  .explainer-row,
+  .stats-row,
+  .apv-stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="topnav">
+  <div class="nav-logo">Met<span>Life</span> · Adriana Rivera</div>
+  <div class="nav-pills">
+    <a class="nav-pill" href="#diagnostico">Diagnóstico</a>
+    <a class="nav-pill" href="#sva">SVA</a>
+    <a class="nav-pill" href="#apv">APV</a>
+    <a class="nav-pill" href="#presupuesto">Presupuesto</a>
+    <a class="nav-pill cta-pill" id="nav-wa" href="#">WhatsApp</a>
+    <button class="theme-btn" id="theme-toggle" title="Cambiar modo" onclick="toggleTheme()">🌙</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-label">MetLife Chile · Propuesta personalizada</div>
+  <h1 class="hero-title">Tu ahorro.<br><span class="accent">Tu protección.</span></h1>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div><strong>Adriana Rivera</strong></div>
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div>26 años · Geóloga · Santiago</div>
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div>Meta: pie departamento</div>
+    <div class="hero-meta-item"><div class="hero-meta-dot"></div>Preparado por Felipe Guerra · Abril 2026</div>
+  </div>
+
+  <div class="urgency-badge">
+    <div class="urgency-badge-dot"></div>
+    Cumples 27 años el 29 de julio · precio actual vigente por 3 meses más
+  </div>
+
+  <div class="hero-cards">
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Cobertura de vida</div>
+      <div class="hero-stat-val">$164.118.900</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Oncológico incluido</div>
+      <div class="hero-stat-val green">UF 800</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Ahorro acumulado año 10</div>
+      <div class="hero-stat-val green">$13.170.000</div>
+    </div>
+    <div class="hero-stat-card">
+      <div class="hero-stat-label">Desde</div>
+      <div class="hero-stat-val">$295.000<span style="font-size:14px;color:var(--gray);font-weight:400">/mes</span></div>
+    </div>
+  </div>
+  <div class="scroll-hint">Explorar</div>
+</section>
+
+<!-- DIAGNÓSTICO -->
+<section id="diagnostico" class="page-section alt">
+  <div class="eyebrow">Tu situación</div>
+  <h2 class="big-title">Diagnóstico</h2>
+
+  <div class="diag-grid">
+    <div class="diag-col verde fu">
+      <div class="diag-col-head">
+        <div class="diag-icon">✓</div>
+        <span class="diag-col-head-label">Lo que funciona</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sueldo estable $1.200.000 líquido</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>$400.000/mes disponibles para ahorrar</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>$2.000.000 ahorrados en Coopeuch</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Meta clara y plazo definido</p></div>
+    </div>
+    <div class="diag-col rojo fu" style="transition-delay:.1s">
+      <div class="diag-col-head">
+        <div class="diag-icon">!</div>
+        <span class="diag-col-head-label">Lo que falta</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin cobertura de vida — tu papá no tuvo, tú sí puedes</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Ahorro sin estructura ni protección</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin APV — el SII te devuelve plata que hoy pierdes</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Sin invalidez por enfermedad confirmada</p></div>
+    </div>
+    <div class="diag-col azul fu" style="transition-delay:.2s">
+      <div class="diag-col-head">
+        <div class="diag-icon">→</div>
+        <span class="diag-col-head-label">Tu meta</span>
+      </div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Pie departamento — ahorro estructurado en UF</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>Proteger a tu mamá Rut si algo te pasa en faena</p></div>
+      <div class="diag-item"><div class="diag-bullet"></div><p>No jubilarte solo con AFP — "no quiero ser como mi mamá"</p></div>
+    </div>
+  </div>
+
+  <div class="diag-quote fu" style="transition-delay:.3s">
+    <p>Con $295.000 al mes tienes el ahorro para el pie Y tu mamá Rut queda protegida. Tu papá no tuvo eso — tú sí lo puedes tener.</p>
+  </div>
+</section>
+
+<!-- SVA -->
+<section id="sva" class="page-section">
+  <div class="eyebrow">Tu fondo de ahorro</div>
+  <h2 class="big-title">SVA · Vida + Ahorro</h2>
+
+  <!-- Explainer -->
+  <div class="explainer-row fu">
+    <div class="exp-card basica">
+      <div class="exp-tag">Prima Básica</div>
+      <div>
+        <div class="exp-amount-val">$80.058</div>
+        <div class="exp-amount-sub">UF 2,00 / mes · protección</div>
+      </div>
+      <div class="exp-desc">Cubre tu <strong>seguro de vida, PACI y oncológico</strong> — cobertura activa desde el día uno. Esta parte no acumula, pero te da UF 4.100 de protección más UF 800 oncológico.</div>
+    </div>
+    <div class="exp-card ahorro">
+      <div class="exp-tag">Prima Ahorro en Exceso</div>
+      <div>
+        <div class="exp-amount-val" id="exp-ahorro-val">$120.087</div>
+        <div class="exp-amount-sub" id="exp-ahorro-sub">UF 3,00 / mes · se acumula</div>
+      </div>
+      <div class="exp-desc">Se invierte en UF y crece año a año. Es <strong>tu fondo para el pie</strong> — estructurado, protegido contra la inflación y con rentabilidad proyectada al 3,87% anual.</div>
+    </div>
+  </div>
+
+  <!-- Toggle -->
+  <div class="toggle-row">
+    <button class="tog-btn active" id="btn-a" onclick="setOp('A')">Opción A · $200.000/mes</button>
+    <button class="tog-btn" id="btn-b" onclick="setOp('B')">Opción B · $400.000/mes</button>
+  </div>
+
+  <!-- Stat boxes -->
+  <div class="stats-row">
+    <div class="stat-box fu">
+      <div class="stat-box-label">Cobertura Vida + PACI</div>
+      <div class="stat-box-val">$164.118.900</div>
+      <div class="stat-box-sub">UF 4.100</div>
+    </div>
+    <div class="stat-box fu" style="transition-delay:.08s">
+      <div class="stat-box-label">Oncológico incluido</div>
+      <div class="stat-box-val green">$32.023.200</div>
+      <div class="stat-box-sub">UF 800</div>
+    </div>
+    <div class="stat-box fu" style="transition-delay:.16s">
+      <div class="stat-box-label">Prima ahorro mensual</div>
+      <div class="stat-box-val" id="sb-ahorro-val">$120.087</div>
+      <div class="stat-box-sub" id="sb-ahorro-sub">UF 3,00 / mes</div>
+    </div>
+    <div class="stat-box fu" style="transition-delay:.24s">
+      <div class="stat-box-label">Valor acumulado año 10</div>
+      <div class="stat-box-val green" id="sb-y10-val">$13.170.000</div>
+      <div class="stat-box-sub" id="sb-y10-sub">UF 329,04</div>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="chart-box fu">
+    <div class="chart-box-title">Proyección de ahorro acumulado (Valor Póliza)</div>
+    <div class="chart-box-sub" id="chart-sub">Pesos acumulados · Años 0–10 · Opción A seleccionada</div>
+    <div class="chart-h"><canvas id="chartSVA"></canvas></div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="tabla-box fu">
+    <div class="tabla-head">
+      <span>Año</span><span>Valor Póliza</span><span>En pesos</span><span>Monto Asegurado</span>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 1</div>
+      <div class="t-val" id="ts1-uf"></div>
+      <div class="t-val" id="ts1-clp"></div>
+      <div class="t-val" id="ts1-ma" style="font-size:13px;color:var(--gray)"></div>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 2</div>
+      <div class="t-val" id="ts2-uf"></div>
+      <div class="t-val" id="ts2-clp"></div>
+      <div class="t-val" id="ts2-ma" style="font-size:13px;color:var(--gray)"></div>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 4</div>
+      <div class="t-val" id="ts4-uf"></div>
+      <div class="t-val" id="ts4-clp"></div>
+      <div class="t-val" id="ts4-ma" style="font-size:13px;color:var(--gray)"></div>
+    </div>
+    <div class="tabla-row">
+      <div class="t-year">Año 10</div>
+      <div class="t-val green" id="ts10-uf"></div>
+      <div class="t-val green" id="ts10-clp"></div>
+      <div class="t-val" id="ts10-ma" style="font-size:13px;color:var(--gray)"></div>
+    </div>
+    <div class="meta-tag" id="sva-nota">★ Proyección personalizada MetLife 3,87% anual · No garantizado</div>
+  </div>
+
+  <!-- Coberturas -->
+  <div class="cob-badges fu" style="transition-delay:.1s">
+    <div class="cob-badge">
+      <div class="cob-badge-check"></div>
+      <div>
+        <div class="cob-badge-text">Fallecimiento</div>
+        <div class="cob-badge-val">UF 4.100</div>
+      </div>
+    </div>
+    <div class="cob-badge">
+      <div class="cob-badge-check"></div>
+      <div>
+        <div class="cob-badge-text">Oncológico</div>
+        <div class="cob-badge-val">UF 800</div>
+      </div>
+    </div>
+    <div class="cob-badge">
+      <div class="cob-badge-check"></div>
+      <div>
+        <div class="cob-badge-text">PACI incluido</div>
+        <div class="cob-badge-val">Enf. catastrófica</div>
+      </div>
+    </div>
+    <div class="cob-badge">
+      <div class="cob-badge-check"></div>
+      <div>
+        <div class="cob-badge-text">Premio Permanencia</div>
+        <div class="cob-badge-val">Año 2 y Año 4</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APV -->
+<section id="apv" class="page-section alt">
+  <div class="eyebrow">Hábito previsional</div>
+  <h2 class="big-title">APV · Jubilación</h2>
+
+  <!-- Top layout: stats + info card -->
+  <div class="apv-grid fu">
+    <div class="apv-stats">
+      <div class="stat-box">
+        <div class="stat-box-label">Prima mensual</div>
+        <div class="stat-box-val">$95.669</div>
+        <div class="stat-box-sub">UF 2,39 / mes</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-label">Cobertura vida</div>
+        <div class="stat-box-val">$120.132.000</div>
+        <div class="stat-box-sub">UF 3.000</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-label">Valor acumulado año 10</div>
+        <div class="stat-box-val green">$10.668.000</div>
+        <div class="stat-box-sub">UF 266,50</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-box-label">Valor acumulado año 20</div>
+        <div class="stat-box-val green">$28.942.000</div>
+        <div class="stat-box-sub">UF 722,90</div>
+      </div>
+    </div>
+
+    <div class="apv-info-card">
+      <div class="apv-info-title">Crecimiento proyectado</div>
+      <div class="apv-timeline">
+        <div class="apv-tl-item">
+          <div>
+            <div class="apv-tl-year">Año 2</div>
+            <div class="apv-tl-age">28 años</div>
+          </div>
+          <div>
+            <div class="apv-tl-val">$1.629.000</div>
+            <div class="apv-tl-sub">UF 40,70 acumuladas</div>
+          </div>
+        </div>
+        <div class="apv-tl-item">
+          <div>
+            <div class="apv-tl-year">Año 10</div>
+            <div class="apv-tl-age">36 años</div>
+          </div>
+          <div>
+            <div class="apv-tl-val">$10.668.000</div>
+            <div class="apv-tl-sub">UF 266,50 acumuladas</div>
+          </div>
+        </div>
+        <div class="apv-tl-item">
+          <div>
+            <div class="apv-tl-year">Año 20</div>
+            <div class="apv-tl-age">46 años</div>
+          </div>
+          <div>
+            <div class="apv-tl-val">$28.942.000</div>
+            <div class="apv-tl-sub">UF 722,90 acumuladas</div>
+          </div>
+        </div>
+        <div class="apv-tl-item">
+          <div>
+            <div class="apv-tl-year">Año 30</div>
+            <div class="apv-tl-age">56 años</div>
+          </div>
+          <div>
+            <div class="apv-tl-val">$54.138.000</div>
+            <div class="apv-tl-sub">UF 1.352,10 acumuladas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Régimen A vs B -->
+  <div class="apv-regime-grid fu" style="transition-delay:.1s">
+    <div class="regime-card loser">
+      <div class="regime-label">No recomendado para ti</div>
+      <div class="regime-name">Régimen B</div>
+      <div class="regime-row">
+        <span class="regime-row-label">Beneficio SII</span>
+        <span class="regime-row-val">~4% rebaja base</span>
+      </div>
+      <div class="regime-row">
+        <span class="regime-row-label">Ahorro mensual</span>
+        <span class="regime-row-val">$3.827</span>
+      </div>
+      <div class="regime-row">
+        <span class="regime-row-label">Ahorro anual</span>
+        <span class="regime-row-val">$45.924</span>
+      </div>
+      <div class="regime-row">
+        <span class="regime-row-label">Cuándo conviene</span>
+        <span class="regime-row-val" style="font-size:12px">Ingresos &gt; $4M/mes</span>
+      </div>
+    </div>
+    <div class="regime-card winner">
+      <div class="regime-label">Tu régimen correcto</div>
+      <div class="regime-name">Régimen A</div>
+      <div class="regime-row">
+        <span class="regime-row-label">Beneficio SII</span>
+        <span class="regime-row-val">15% crédito directo</span>
+      </div>
+      <div class="regime-row">
+        <span class="regime-row-label">Ahorro mensual</span>
+        <span class="regime-row-val">$14.350</span>
+      </div>
+      <div class="regime-row">
+        <span class="regime-row-label">Ahorro anual</span>
+        <span class="regime-row-val">$172.204</span>
+      </div>
+      <div class="regime-row">
+        <span class="regime-row-label">Ventaja sobre B</span>
+        <span class="regime-row-val">+$126.280/año</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRESUPUESTO -->
+<section id="presupuesto" class="page-section">
+  <div class="eyebrow">Resumen económico</div>
+  <h2 class="big-title">Presupuesto</h2>
+
+  <div class="budget-rows">
+    <div class="budget-row">
+      <div class="budget-row-name"><div class="budget-dot"></div><span id="bp-sva-label">SVA Opción A — Vida + Ahorro (UF 5/mes)</span></div>
+      <div class="budget-price" id="bp-sva">$200.145</div>
+    </div>
+    <div class="budget-row">
+      <div class="budget-row-name"><div class="budget-dot"></div>APV — Régimen A (UF 2,39/mes)</div>
+      <div class="budget-price">$95.669</div>
+    </div>
+  </div>
+
+  <div class="budget-total-bar">
+    <div class="budget-total-label">Total mensual</div>
+    <div class="budget-total-val" id="bp-total">$295.814</div>
+  </div>
+
+  <div class="budget-rem">
+    <span class="lbl">Remanente (sobre $1.200.000 líquido):</span>
+    <span id="bp-rem"><span class="pos">+$904.186</span></span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="page-section">
+  <div class="cta-inner">
+    <div>
+      <h2 class="cta-title">¿Partimos<br><span>hoy?</span></h2>
+      <p class="cta-sub">Tu plan está diseñado. En 24 meses tienes el ahorro acumulado y tu mamá Rut queda protegida desde el día uno.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:20px">
+      <a class="btn-wa" id="wa-link" href="#" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C5.58 2 2 5.58 2 10c0 1.54.42 2.98 1.15 4.22L2 18l3.9-1.12A7.94 7.94 0 0010 18c4.42 0 8-3.58 8-8s-3.58-8-8-8zm4.43 11.14c-.19.52-1.11 1-1.52 1.04-.4.05-.79.22-2.65-.55-2.22-.93-3.64-3.19-3.75-3.34-.11-.15-.89-1.18-.89-2.25 0-1.07.56-1.59.76-1.81.2-.22.43-.27.57-.27h.41c.13 0 .31-.05.49.37.19.44.64 1.56.7 1.67.06.11.1.24.02.39-.08.15-.12.24-.24.37-.11.13-.24.29-.34.39-.11.11-.23.23-.1.45.13.22.58.96 1.25 1.56.86.77 1.58 1.01 1.8 1.12.23.11.36.09.49-.06.13-.15.55-.64.7-.86.15-.22.3-.18.5-.11.2.07 1.28.6 1.5.71.22.11.36.17.41.26.05.09.05.52-.14 1.03z" fill="#000"/>
+        </svg>
+        Confirmar por WhatsApp
+      </a>
+      <div class="asesor-card">
+        <strong>Felipe Guerra</strong><br>
+        Asesor MetLife · Código 35411051
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-legal">Este documento es una propuesta personalizada preparada con fines informativos. UF de referencia: $40.029 (27/04/2026). Las proyecciones están calculadas con rentabilidad del 3,87% anual real (perfil Personalizado MetLife) y no constituyen garantía de rendimiento futuro. MetLife Chile S.A., Compañía de Seguros de Vida. Sujeto a aprobación de suscripción.</div>
+  <div class="footer-date">Abril 2026</div>
+</footer>
+
+<script>
+const UF = 40029;
+
+const DATA = {
+  A: {
+    totalCLP:  200145,
+    basicaCLP:  80058,
+    ahorroUF:       3,
+    // Valor Póliza en UF
+    y1:   27.87,
+    y2:   61.55,
+    y4:  126.93,
+    y10: 329.04,
+    y20: 735.86,
+    // Monto Asegurado año 1
+    maY1: 4127.87,
+    maY2: 4161.55,
+    maY4: 4226.93,
+    maY10: 4429.04,
+  },
+  B: {
+    totalCLP:  400290,
+    basicaCLP:  80058,
+    ahorroUF:       8,
+    y1:  100.45,
+    y2:  209.52,
+    y4:  434.55,
+    y10: 1225.19,
+    y20: 3047.31,
+    maY1:  4200.45,
+    maY2:  4309.52,
+    maY4:  4534.55,
+    maY10: 5325.19,
+  },
+};
+
+const APV_TOTAL = 95669;
+const INGRESO = 1200000;
+const WA = '56935411051';
+
+let op = 'A';
+let chart = null;
+
+const fmt  = n => '$' + Math.round(n).toLocaleString('es-CL');
+const fmtUF = n => 'UF ' + n.toLocaleString('es-CL', {minimumFractionDigits:2, maximumFractionDigits:2});
+
+function refreshSVA() {
+  const d = DATA[op];
+  const ahorroCLP = d.ahorroUF * UF;
+
+  document.getElementById('exp-ahorro-val').textContent = fmt(ahorroCLP);
+  document.getElementById('exp-ahorro-sub').textContent = fmtUF(d.ahorroUF) + '/mes · se acumula';
+
+  document.getElementById('sb-ahorro-val').textContent = fmt(ahorroCLP);
+  document.getElementById('sb-ahorro-sub').textContent = fmtUF(d.ahorroUF) + '/mes';
+  document.getElementById('sb-y10-val').textContent = fmt(d.y10 * UF);
+  document.getElementById('sb-y10-sub').textContent = fmtUF(d.y10);
+
+  document.getElementById('chart-sub').textContent =
+    'Pesos acumulados · Años 0–10 · Opción ' + op + ' seleccionada';
+
+  // Tabla rows
+  const rows = [
+    { id: 'ts1',  vp: d.y1,  ma: d.maY1 },
+    { id: 'ts2',  vp: d.y2,  ma: d.maY2 },
+    { id: 'ts4',  vp: d.y4,  ma: d.maY4 },
+    { id: 'ts10', vp: d.y10, ma: d.maY10 },
+  ];
+  rows.forEach(r => {
+    document.getElementById(r.id + '-uf').textContent  = fmtUF(r.vp);
+    document.getElementById(r.id + '-clp').textContent = fmt(r.vp * UF);
+    document.getElementById(r.id + '-ma').textContent  = fmtUF(r.ma);
+  });
+
+  refreshChart();
+}
+
+function buildChartData(o) {
+  const d = DATA[o];
+  // Interpolated year 3 between y2 and y4
+  const y3 = (d.y2 + d.y4) / 2;
+  // Interpolate years 5-9 between y4 and y10
+  const step = (d.y10 - d.y4) / 6;
+  const pts = [
+    0, d.y1, d.y2, y3, d.y4,
+    d.y4 + step,
+    d.y4 + step * 2,
+    d.y4 + step * 3,
+    d.y4 + step * 4,
+    d.y4 + step * 5,
+    d.y10,
+  ];
+  return pts.map(v => v * UF);
+}
+
+function refreshChart() {
+  const vals = buildChartData(op);
+  const labels = ['Año 0','Año 1','Año 2','Año 3','Año 4','Año 5','Año 6','Año 7','Año 8','Año 9','Año 10'];
+
+  if (chart) {
+    chart.data.datasets[0].data = vals;
+    chart.update('active');
+    return;
+  }
+
+  const isDark = !document.documentElement.classList.contains('light');
+  const ctx = document.getElementById('chartSVA').getContext('2d');
+  chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Ahorro acumulado (Valor Póliza)',
+        data: vals,
+        borderColor: '#00A0DF',
+        backgroundColor: 'rgba(0,160,223,0.07)',
+        borderWidth: 2.5,
+        pointRadius: 4,
+        pointBackgroundColor: '#00A0DF',
+        pointBorderColor: isDark ? '#030D1A' : '#fff',
+        pointBorderWidth: 2,
+        fill: true,
+        tension: 0.4,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: { color: '#8A8A8A', font: { family: 'Inter', size: 12 }, boxWidth: 16, padding: 16 },
+        },
+        tooltip: {
+          backgroundColor: '#1D2B3A',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleColor: '#8A8A8A',
+          bodyColor: '#F0F5FA',
+          callbacks: {
+            label: c => ' ' + fmt(c.parsed.y),
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { color: '#8A8A8A', font: { family: 'Inter', size: 12 } },
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#8A8A8A',
+            font: { family: 'Inter', size: 12 },
+            callback: v => '$' + (v / 1000000).toFixed(1) + 'M',
+          },
+        },
+      },
+    },
+  });
+}
+
+function refreshBudget() {
+  const d = DATA[op];
+  const total = d.totalCLP + APV_TOTAL;
+  const rem = INGRESO - total;
+  document.getElementById('bp-sva-label').textContent =
+    'SVA Opción ' + op + ' — Vida + Ahorro (UF ' + (op === 'A' ? '5' : '10') + '/mes)';
+  document.getElementById('bp-sva').textContent = fmt(d.totalCLP);
+  document.getElementById('bp-total').textContent = fmt(total);
+  const remEl = document.getElementById('bp-rem');
+  remEl.innerHTML = `<span class="${rem >= 0 ? 'pos' : 'neg'}">${(rem >= 0 ? '+' : '') + fmt(rem)}</span>`;
+}
+
+function setOp(o) {
+  op = o;
+  document.getElementById('btn-a').classList.toggle('active', o === 'A');
+  document.getElementById('btn-b').classList.toggle('active', o === 'B');
+  refreshSVA();
+  refreshBudget();
+}
+
+// WhatsApp
+const waMsg = encodeURIComponent('Hola Felipe, soy Adriana. Revisé mi propuesta y quiero avanzar con el plan SVA + APV.');
+const waUrl = 'https://wa.me/' + WA + '?text=' + waMsg;
+document.getElementById('wa-link').href = waUrl;
+document.getElementById('nav-wa').href = waUrl;
+
+// Intersection Observer for animations
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fu').forEach(el => io.observe(el));
+
+// Theme toggle
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  if (chart) { chart.destroy(); chart = null; }
+  refreshChart();
+}
+(function () {
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-toggle').textContent = '☀️';
+  }
+})();
+
+// Init
+refreshSVA();
+refreshBudget();
+</script>
+</body>
+</html>
