@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetLife · Propuestas Felipe Guerra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #030D1A;
+  --bg1:       #071525;
+  --bg2:       #0D1F35;
+  --bg3:       #132840;
+  --green:     #00A0DF;
+  --green-dim: rgba(0,160,223,0.10);
+  --green-glow: 0 0 30px rgba(0,160,223,0.22);
+  --white:     #F0F5FA;
+  --gray:      #7A90A8;
+  --gray-dark: #1A3550;
+  --gold:      #F5A623;
+  --sans:      'Inter', system-ui, sans-serif;
+  --radius:    16px;
+  --radius-lg: 24px;
+  --border:    rgba(255,255,255,0.07);
+}
+
+html.light {
+  --bg:        #F0F5FA;
+  --bg1:       #E6EEF7;
+  --bg2:       #FFFFFF;
+  --bg3:       #D8E8F5;
+  --green:     #0065AC;
+  --green-dim: rgba(0,101,172,0.08);
+  --green-glow: 0 0 20px rgba(0,101,172,0.18);
+  --white:     #1A2A3A;
+  --gray:      #5A7080;
+  --gray-dark: #C5D8E8;
+  --gold:      #C47F00;
+  --border:    rgba(0,56,101,0.1);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ───────────────────────────────── */
+header {
+  padding: 48px clamp(24px,6vw,100px) 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+.logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.logo span { color: #00C4FF; }
+.logo-sub {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--gray);
+  margin-top: 4px;
+  letter-spacing: 0;
+}
+.theme-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--gray);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { border-color: var(--green); color: var(--green); }
+
+/* ── HERO TEXT ────────────────────────────── */
+.hero {
+  padding: 56px clamp(24px,6vw,100px) 0;
+}
+.eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--green); }
+.hero h1 {
+  font-size: clamp(36px,6vw,72px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.hero h1 span { color: #00C4FF; }
+.hero p {
+  font-size: 15px;
+  color: var(--gray);
+  max-width: 480px;
+  line-height: 1.6;
+}
+
+/* ── STATS BAR ────────────────────────────── */
+.stats-bar {
+  display: flex;
+  gap: 32px;
+  padding: 36px clamp(24px,6vw,100px);
+  flex-wrap: wrap;
+}
+.stat-item {}
+.stat-val {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.stat-val.green { color: var(--green); }
+.stat-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+/* ── DIVIDER ──────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 clamp(24px,6vw,100px);
+}
+
+/* ── GRID ─────────────────────────────────── */
+.grid-section {
+  padding: 48px clamp(24px,6vw,100px) 80px;
+}
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 24px;
+}
+.clients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* ── CLIENT CARD ──────────────────────────── */
+.client-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  text-decoration: none;
+  display: block;
+  transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.client-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--green);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+.client-card:hover {
+  border-color: rgba(0,160,223,0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3), var(--green-glow);
+}
+.client-card:hover::before { opacity: 1; }
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-name {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  line-height: 1.2;
+}
+.card-date {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 4px;
+}
+.card-arrow {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--green-dim);
+  border: 1px solid rgba(0,160,223,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.client-card:hover .card-arrow {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+
+.card-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.meta-chip {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 100px;
+  padding: 4px 12px;
+}
+
+.card-products {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.product-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid rgba(0,160,223,0.15);
+}
+
+/* ── EMPTY STATE ──────────────────────────── */
+.empty-card {
+  background: var(--bg2);
+  border: 1px dashed var(--gray-dark);
+  border-radius: var(--radius-lg);
+  padding: 40px 32px;
+  text-align: center;
+  color: var(--gray);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ── FOOTER ───────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px clamp(24px,6vw,100px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-left { font-size: 12px; color: var(--gray); }
+.footer-left strong { color: var(--white); font-weight: 600; }
+.footer-right { font-size: 11px; color: rgba(255,255,255,0.15); }
+
+/* ── LIGHT OVERRIDES ──────────────────────── */
+html.light .client-card { background: #fff; box-shadow: 0 2px 12px rgba(0,56,101,0.06); }
+html.light .client-card:hover { box-shadow: 0 8px 32px rgba(0,56,101,0.12); }
+html.light .meta-chip { background: rgba(0,56,101,0.04); border-color: rgba(0,56,101,0.1); }
+html.light .empty-card { background: #fff; }
+html.light footer { border-top-color: rgba(0,56,101,0.1); }
+html.light .footer-right { color: rgba(0,56,101,0.25); }
+html.light .theme-btn { background: #fff; }
+
+@media (max-width: 600px) {
+  .stats-bar { gap: 20px; }
+  .clients-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Met<span>Life</span></div>
+    <div class="logo-sub">Felipe Guerra · Código 35411051</div>
+  </div>
+  <button class="theme-btn" id="theme-toggle" onclick="toggleTheme()" title="Cambiar modo">🌙</button>
+</header>
+
+<div class="hero">
+  <div class="eyebrow">Propuestas personalizadas</div>
+  <h1>Tus<br><span>clientes.</span></h1>
+  <p>Cada propuesta diseñada para la situación específica del cliente. Comparte el link directo por WhatsApp.</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-val green" id="total-clientes">2</div>
+    <div class="stat-lbl">Propuestas activas</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">Abril</div>
+    <div class="stat-lbl">Mes en curso</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="grid-section">
+  <div class="section-label">Propuestas · 2026</div>
+  <div class="clients-grid">
+
+    <!-- Adriana Rivera -->
+    <a class="client-card" href="clientes/adriana-rivera/dark.html">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Adriana Rivera</div>
+          <div class="card-date">27 abril 2026 · R2 agendada</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-meta">
+        <span class="meta-chip">26 años</span>
+        <span class="meta-chip">Geóloga</span>
+        <span class="meta-chip">$295.000/mes</span>
+      </div>
+      <div class="card-products">
+        <span class="product-tag">SVA</span>
+        <span class="product-tag">APV</span>
+      </div>
+    </a>
+
+    <!-- Hugo Irribarra -->
+    <a class="client-card" href="clientes/hugo-irribarra/dark.html">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Hugo Irribarra</div>
+          <div class="card-date">Abril 2026</div>
+        </div>
+        <div class="card-arrow">→</div>
+      </div>
+      <div class="card-meta">
+        <span class="meta-chip">27 años</span>
+        <span class="meta-chip">Ingeniero IT</span>
+        <span class="meta-chip">$500.000/mes</span>
+      </div>
+      <div class="card-products">
+        <span class="product-tag">Salud Total</span>
+        <span class="product-tag">Plan Integral</span>
+        <span class="product-tag">APV</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-left"><strong>Felipe Guerra</strong> · Asesor MetLife Chile · +56 9 3541 1051</div>
+  <div class="footer-right">metlife-landings · GitHub Pages</div>
+</footer>
+
+<script>
+function toggleTheme() {
+  const isLight = document.documentElement.classList.toggle('light');
+  document.getElementById('theme-toggle').textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+(function () {
+  if (localStorage.getItem('theme') === 'light') {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-toggle').textContent = '☀️';
+  }
+})();
+</script>
+</body>
+</html>
